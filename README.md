@@ -20,3 +20,8 @@ sistema_de_adquisición_de_datos/
 └── certificados/
     ├── server.crt
     └── server.key
+
+
+
+
+
