@@ -1,0 +1,92 @@
+el docker-compose que se esta utilizando:
+version: '0.1'
+
+services:
+    
+    ionic-ui:
+        build:
+            context:            ./src/frontend/Proyecto
+            dockerfile:         Dockerfile
+        ports:
+        -                       "8100:8100"
+        container_name:         ionic-ui
+        volumes:
+        -                      ./src/frontend/Proyecto:/src/frontend/Proyecto
+        -                      /src/frontend/Proyecto/node_modules
+        command:               ionic serve --external
+
+    mysql-server:
+        image:                   mysql:5.7
+        hostname:                mysql-server
+        environment:
+            MYSQL_ROOT_PASSWORD: userpass
+        container_name:          mysql-server
+        volumes:
+            -                    ./db/dumps:/docker-entrypoint-initdb.d
+            -                    ./db/data:/var/lib/mysql
+        networks:
+            -                    Sistema_de_adquisicion_de_datos
+        ports:
+            -                    "3306:3306"
+
+    mysql-admin:
+        image:                   phpmyadmin/phpmyadmin
+        environment: 
+            PMA_HOST:            mysql-server
+            PMA_PORT:            3306
+            MYSQL_ROOT_PASSWORD: userpass
+        container_name:          mysql-admin
+        networks:
+            -                    Sistema_de_adquisicion_de_datos
+        depends_on:
+            -                    mysql-server
+        ports:
+            -                    "8001:80"
+
+    node-backend:
+        image:                   abassi/nodejs-server:10.0-dev
+        container_name:          node-backend
+        volumes:
+            -                    ./src/backend:/home/node/app/src
+            -                    ./src/frontend:/home/node/app/static
+        networks:
+            -                    Sistema_de_adquisicion_de_datos
+        depends_on:
+            -                    mysql-server
+        ports: 
+            -                    "8000:3000"
+        command:                 nodemon /home/node/app/src/index.js
+    
+    emqx:
+        container_name:          emqx
+        image:                   emqx/emqx:4.2.3
+        ports:
+        -                       "18083:18083"
+        -                       "8083:8083"
+        networks:
+            Sistema_de_adquisicion_de_datos:
+                aliases:
+                - node.emqx.io
+
+networks:
+    Sistema_de_adquisicion_de_datos:
+        driver:                  bridge
+
+Al modificar el ionic- ui:
+
+tienes que escribir esta linea de comando  docker-compose build ionic-ui, tambien hay q estar pendiente del dockerfile.
+
+El dockerfile va dentro de la carpeta proyecto que se creo
+
+y el contenido del dockerfile que estoy utilizando es:
+
+FROM node:18
+
+WORKDIR /src/frontend/Proyecto
+
+COPY package*.json ./
+
+RUN npm install -g @ionic/cli @angular-devkit/build-angular && npm install
+
+EXPOSE 8100
+
