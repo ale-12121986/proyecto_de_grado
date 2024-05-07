@@ -1,6 +1,7 @@
 sistema_de_adquisición_de_datos/
 │
 ├── backend/
+│    ├── certificados/
 │    ├── node_module/
 │    ├── routes/
 │    │   ├── medición
