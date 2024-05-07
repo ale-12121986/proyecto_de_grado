@@ -1,0 +1,81 @@
+version: '0.1'
+#version: '3.7'
+services:
+
+    ionic-ui:
+        build:
+            context:            ./src/frontend/proyecto
+            dockerfile:         Dockerfile
+        ports:
+            -                   "8100:8100"
+        container_name:         ionic-ui
+        volumes:
+            -                   ./src/frontend/proyecto:/src/frontend/proyecto
+            -                    /src/frontend/proyecto/node_modules
+        command:               ionic serve --external --live-reload=true --progress=true --lab --no-open
+
+
+        #command: ionic serve --open --live-reload=true --progress=true
+
+    mysql-server:
+        image:                   mysql:5.7
+        hostname:                mysql-server
+        environment:
+            MYSQL_DATABASE:      Bateadora
+            MYSQL_ROOT_PASSWORD: userpass
+        container_name:          mysql-server
+        volumes:
+            -                    ./db/dumps:/docker-entrypoint-initdb.d
+            -                    ./db/data:/var/lib/mysql
+        networks:
+            -                    Sistema_de_adquisicion_de_datos
+        ports:
+            -                    "3306:3306"
+
+    mysql-admin:
+        image:                   phpmyadmin/phpmyadmin
+        environment: 
+            PMA_HOST:            mysql-server
+            PMA_PORT:            3306
+            MYSQL_ROOT_PASSWORD: userpass
+        container_name:          mysql-admin
+        networks:
+            -                    Sistema_de_adquisicion_de_datos
+        depends_on:
+            -                    mysql-server
+        ports:
+            -                    "8001:80"
+
+    node-backend:
+        image:                   abassi/nodejs-server:10.0-dev
+        container_name:          node-backend
+        volumes:
+            -                    ./src/backend:/home/node/app/src
+            -                    ./src/frontend:/home/node/app/static
+        networks:
+            -                    Sistema_de_adquisicion_de_datos
+        depends_on:
+            -                    mysql-server
+        ports: 
+            -                    "8000:3000"
+        command:                 nodemon /home/node/app/src/index.js
+    
+    emqx:
+        container_name:          emqx
+        image:                   emqx/emqx:4.2.3
+        ports:
+            -                       "18083:18083"
+            -                       "8083:8083"
+            -                       "8084:8084"
+            -                       "8883:8883"
+            -                       "1883:1883"
+        volumes:
+            -                     ./certificados:/opt/emqx/etc/certs
+        networks:
+            Sistema_de_adquisicion_de_datos:
+                aliases:
+                    - node.emqx.io
+
+networks:
+    Sistema_de_adquisicion_de_datos:
+        driver:             bridge
