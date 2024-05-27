@@ -4,8 +4,8 @@ WORKDIR /src/frontend/proyecto
 
 COPY package*.json ./
 
-RUN npm install -g @ionic/cli @angular-devkit/build-angular && npm install && npm install chart.js@2.9.4 --save
-
+RUN npm install -g @ionic/cli @angular-devkit/build-angular && npm install && npm install chart.js@2.9.4 --save && npm install mqtt@3.0.0 
+                
 EXPOSE 8100
 
 CMD ["npm", "start"]

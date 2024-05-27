@@ -1,6 +1,6 @@
 const express = require('express')
 
-const routerTrabajo = express.Router()
+const routerTrabajo = express.Router();
 
 var pool = require('../../mysql-connector');
 
@@ -33,4 +33,4 @@ routerTrabajo.post('/eliminar', function(req, res) {
         res.send(results).status(200);
     });
 })
-module.exports = routerTrabajo
+module.exports = routerTrabajo;

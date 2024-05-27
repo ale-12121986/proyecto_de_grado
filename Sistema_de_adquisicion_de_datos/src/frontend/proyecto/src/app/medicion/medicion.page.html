@@ -17,10 +17,10 @@
         <ion-button expand="block" [routerLink] = "['/cargar-trabajo',id]">Agregar</ion-button>
       </ion-col>
       <ion-col size="4">
-        <ion-button expand="block">Botón 2</ion-button>
+        <ion-button expand="block" (click)="graficaGuardada()">Ver trabajo realizado</ion-button>
       </ion-col>
       <ion-col size="4">
-        <ion-button expand="block">Botón 3</ion-button>
+        <ion-button expand="block"(click)="startListening()" >Ver trabajo en tiempo real</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
