@@ -13,9 +13,9 @@ const routerRegistrar = require('./routes/registrar');
 const routerTrabajo = require('./routes/trabajo');
 const routerCargarTrabajo = require('./routes/cargar-trabajo');
 const routerMedicion = require('./routes/medicion');
- const routerMqtt = require('./routes/mqtt');
-// const http = require('http'); // Importa el módulo http
-// const socketIo = require('socket.io'); // Importa el módulo socket.io
+const routerMqtt = require('./routes/mqtt');
+// const io = require('..backend/IoInstance');
+
 var corsOptions = {
     origin: '*',
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
@@ -44,7 +44,6 @@ app.use('/registrar', routerRegistrar);
 app.use('/trabajo', routerTrabajo);
 app.use('/cargar-trabajo', routerCargarTrabajo);
 app.use('/medicion', routerMedicion);
-// app.use('/mqtt', routerMqtt);
 
 //=======[ Main module code ]==================================================
 
@@ -56,5 +55,4 @@ app.listen(PORT, function(req, res) {
     console.log("NodeJS API running correctly");
 });
 
-// module.exports = app;
 //=======[ End of file ]=======================================================

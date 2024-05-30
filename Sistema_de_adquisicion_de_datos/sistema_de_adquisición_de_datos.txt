@@ -9,12 +9,26 @@ sistema_de_adquisición_de_datos/
 │    │   ├── trabajo
 │    │   ├── carga-trabajo 
 │    │   └── registrar
+│    ├── IoInstance/   
+│    │   └── index.js  
 │    ├── index.js   	
 │    ├── MySQL-connector.js
 │    ├── package-lock.json
 │    └── package.json
 ├── frontend/
-│   ├──dockerfile 
+│    ├── proyecto
+│    │    ├── node_module
+│    │    ├── src
+│    │    │   ├── App
+│    │    |   |    ├── cargar-trabajo
+│    │    |   |    ├── folder
+│    │    |   |    ├── guards
+│    │    |   |    ├── home
+│    │    |   |    ├── interfaces
+│    │    |   |    ├── trabajo
+│    │    |   |    ├── services
+│    │    |   |    ├── cargar-trabajo
+│    ├──dockerfile 
 ├── docker-compose.yml
 │
 └── certificados/

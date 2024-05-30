@@ -1,12 +1,12 @@
 const express = require('express');
-console.log("hola");
+console.log("Entro a la configuracionMqtt");
 // const routerMqtt = express.Router();
 const mqtt = require('mqtt');
-// const http = require('http');
-// const socketIo = require('socket.io');
 var pool = require('../../mysql-connector');
+// const io = require('/..');
 //Enviar datos a la base de datos por medio de la comunicacion mqtt
 // Nombre del topic para la comunicación
+
 var resultado;
 var idTrabajo;
 var mqttMessage;
@@ -14,8 +14,8 @@ var topic2;
 var mainTopic;
 var subTopic;
 var distancia1, alineacion1, peralte1, nivel_izquierdo1, nivel_derecho1;
-
 const topic = 'Bateadora/#'; 
+
 const options = {
     port:8083,
     clean: true, // retain session
@@ -27,10 +27,13 @@ const options = {
     //password: 'emqx_test',
     keepalive: 60,
 }
+
 var client = mqtt.connect('ws://192.168.2.4/mqtt', options); //192.168.241.8
 //Manejar la conexion
 
 
+
+//Comunicacion mqtt
 client.on('connect', () =>{
     console.log("Conectado al broker MQTT por WS con exito", topic);
     client.subscribe(topic);
@@ -56,7 +59,7 @@ client.on('message', (topic, message) => {
     if(topic === "Bateadora") {
         console.log("entro a insertar datos",message.toString());
         const payload = JSON.parse(message.toString());
-        // io.emit('mqttData', payload);
+        // io.emit('datosDesdeMQTT', dataFromMQTT);
         const { distancia, alineacion, peralte, nivel_izquierdo, nivel_derecho,tipoMedicion, idtrabajo2} = payload;
         distancia1 = payload.distancia;
         alineacion1 = payload.alineacion;
@@ -92,8 +95,9 @@ client.on('message', (topic, message) => {
                     console.log(`Mensaje enviado en el tema: ${topic2}: ${mqttMessage}`);
                 });
             }
-        });
-            
+        });    
     }
 });
+
+
 module.exports = client;
