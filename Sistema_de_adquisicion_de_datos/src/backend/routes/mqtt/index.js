@@ -19,7 +19,7 @@ const topic = 'Bateadora/#';
 const options = {
     port:8083,
     clean: true, // retain session
-    host:'192.168.2.4',// 192.168.241.8
+    host:'54.232.196.184',// 192.168.241.8
     connectTimeout: 4000, // Timeout period
     // Authentication information
     clientId: `emqx_test_${Math.random().toString(16).slice(3)}`,
