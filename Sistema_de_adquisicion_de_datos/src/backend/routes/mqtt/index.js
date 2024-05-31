@@ -28,7 +28,7 @@ const options = {
     keepalive: 60,
 }
 
-var client = mqtt.connect('ws://192.168.2.4/mqtt', options); //192.168.241.8
+var client = mqtt.connect('ws://54.232.196.184/mqtt', options); //192.168.241.8
 //Manejar la conexion
 
 
