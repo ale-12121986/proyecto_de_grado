@@ -70,24 +70,25 @@ services:
             -                       "8084:8084"
             -                       "8883:8883"
             -                       "1883:1883"
+            -                       "8081:8081"
         volumes:
             -                     ./certificados:/opt/emqx/etc/certs
         environment:
             #-                      EMQX_PLUGINS__EMQX_AUTH_USERNAME=on
             #-                      EMQX_ALLOW_ANONYMOUS=off
+            #-                      EMQX_ALLOW_ANONYMOUS:"false"
             #-                      EMQX_LISTENER__TCP__EXTERNAL=8883
-            #-                      EMQX_ALLOW_USER_ANONYMOUS=off
-            #-                      EMQX_ALLOW_ANONYMOUS=false
-            # -                      EMQX_AUTH__USER__1__USERNAME:"BateadorasVyO"
-            # -                      EMQX_AUTH__USER__1__PASSWORD:"Trenes_Argentinos"
+            #-                      EMQX_ALLOW_USER_ANONYMOUS:off
+            #-                      EMQX_AUTH__USER__1__USERNAME:"BateadorasVyO"
+            #-                      EMQX_AUTH__USER__1__PASSWORD:"Trenes_Argentinos"
             -                      EMQX_LISTENER__SSL__EXTERNAL__CACERTFILE=/opt/emqx/etc/certs/rootCA.crt
             -                      EMQX_LISTENER__SSL__EXTERNAL__CERTFILE=/opt/emqx/etc/certs/server.crt
             -                      EMQX_LISTENER__SSL__EXTERNAL__KEYFILE=/opt/emqx/etc/certs/server.key
             -                      EMQX_LISTENER__WSS__EXTERNAL__CACERTFILE=/opt/emqx/etc/certs/rootCA.crt
             -                      EMQX_LISTENER__WSS__EXTERNAL__CERTFILE=/opt/emqx/etc/certs/server.crt
             -                      EMQX_LISTENER__WSS__EXTERNAL__KEYFILE=/opt/emqx/etc/certs/server.key
-            #-                      EMQX_AUTH__USERNAME=BateadorasVyO
-            #-                      EMQX_AUTH__PASSWORD=Trenes_Argentinos
+            #-                      EMQX_AUTH__USERNAME:"BateadorasVyO"
+            #-                      EMQX_AUTH__PASSWORD:"Trenes_Argentinos"
         networks:
             Sistema_de_adquisicion_de_datos:
                 aliases:
