@@ -1,7 +1,6 @@
 sistema_de_adquisición_de_datos/
 │
 ├── backend/
-│    ├── certificados/
 │    ├── node_module/
 │    ├── routes/
 │    │   ├── medición
@@ -16,19 +15,42 @@ sistema_de_adquisición_de_datos/
 │    ├── package-lock.json
 │    └── package.json
 ├── frontend/
-│    ├── proyecto
-│    │    ├── node_module
-│    │    ├── src
-│    │    │   ├── App
-│    │    |   |    ├── cargar-trabajo
-│    │    |   |    ├── folder
-│    │    |   |    ├── guards
-│    │    |   |    ├── home
-│    │    |   |    ├── interfaces
-│    │    |   |    ├── trabajo
-│    │    |   |    ├── services
-│    │    |   |    ├── cargar-trabajo
-│    ├──dockerfile 
+│    ├── proyecto/
+│    │    ├── node_module/
+│    │    ├── src/
+│    │    │    ├── App
+│    │    │    │    ├── cargar-trabajo
+│    │    │    │    ├── folder
+│    │    │    │    ├── guards
+│    │    │    │    ├── home
+│    │    │    │    ├── interfaces
+│    │    │    │    ├── trabajo
+│    │    │    │    ├── services
+│    │    │    │    └── cargar-trabajo
+│    │    │    ├──assets/
+│    │    │    ├──enviroments/
+│    │    │    ├──theme/
+│    │    │    ├──global.scss
+│    │    │    ├──index.js
+│    │    │    ├──main.js
+│    │    │    ├──polyfill.ts
+│    │    │    ├──test.ts
+│    │    │    └──zone-flags.ts
+│    │    ├──.browserlisttrc
+│    │    ├──.editorconfig
+│    │    ├──.eslintrc.json      
+│    │    ├──angular.json
+│    │    ├──capasitor.config.ts
+│    │    ├──.editorconfig
+│    │    ├──node_modules/
+│    │    ├──ionic.config.ts
+│    │    ├──karma.config.ts
+│    │    ├──package-lock.json
+│    │    ├──package.json  
+│    │    ├──tsconsig.app.json
+│    │    ├──tsconsig.spec.json          
+│    │    ├──.vscode/
+│    │    └──dockerfile 
 ├── docker-compose.yml
 │
 └── certificados/

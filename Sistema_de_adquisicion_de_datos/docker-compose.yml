@@ -52,6 +52,7 @@ services:
         volumes:
             -                    ./src/backend:/home/node/app/src
             -                    ./src/frontend:/home/node/app/static
+            -                    ./certificados:/home/node/app/certificados
         networks:
             -                    Sistema_de_adquisicion_de_datos
         depends_on:
@@ -62,7 +63,7 @@ services:
     
     emqx:
         container_name:          emqx
-        image:                   emqx/emqx:4.2.3
+        image:                   emqx/emqx:4.3.17   #5.0.26
         ports:
             -                       "18083:18083"
             -                       "8083:8083"
@@ -71,6 +72,22 @@ services:
             -                       "1883:1883"
         volumes:
             -                     ./certificados:/opt/emqx/etc/certs
+        environment:
+            #-                      EMQX_PLUGINS__EMQX_AUTH_USERNAME=on
+            #-                      EMQX_ALLOW_ANONYMOUS=off
+            #-                      EMQX_LISTENER__TCP__EXTERNAL=8883
+            #-                      EMQX_ALLOW_USER_ANONYMOUS=off
+            #-                      EMQX_ALLOW_ANONYMOUS=false
+            # -                      EMQX_AUTH__USER__1__USERNAME:"BateadorasVyO"
+            # -                      EMQX_AUTH__USER__1__PASSWORD:"Trenes_Argentinos"
+            -                      EMQX_LISTENER__SSL__EXTERNAL__CACERTFILE=/opt/emqx/etc/certs/rootCA.crt
+            -                      EMQX_LISTENER__SSL__EXTERNAL__CERTFILE=/opt/emqx/etc/certs/server.crt
+            -                      EMQX_LISTENER__SSL__EXTERNAL__KEYFILE=/opt/emqx/etc/certs/server.key
+            -                      EMQX_LISTENER__WSS__EXTERNAL__CACERTFILE=/opt/emqx/etc/certs/rootCA.crt
+            -                      EMQX_LISTENER__WSS__EXTERNAL__CERTFILE=/opt/emqx/etc/certs/server.crt
+            -                      EMQX_LISTENER__WSS__EXTERNAL__KEYFILE=/opt/emqx/etc/certs/server.key
+            #-                      EMQX_AUTH__USERNAME=BateadorasVyO
+            #-                      EMQX_AUTH__PASSWORD=Trenes_Argentinos
         networks:
             Sistema_de_adquisicion_de_datos:
                 aliases:

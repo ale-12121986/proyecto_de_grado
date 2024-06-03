@@ -1,8 +1,12 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 const express = require('express');
 console.log("Entro a la configuracionMqtt");
 // const routerMqtt = express.Router();
 const mqtt = require('mqtt');
 var pool = require('../../mysql-connector');
+
+const fs = require('fs');
 // const io = require('/..');
 //Enviar datos a la base de datos por medio de la comunicacion mqtt
 // Nombre del topic para la comunicación
@@ -17,18 +21,23 @@ var distancia1, alineacion1, peralte1, nivel_izquierdo1, nivel_derecho1;
 const topic = 'Bateadora/#'; 
 
 const options = {
-    port:8083,
+    // port:8083,
+    port:8084,
     clean: true, // retain session
-    host:'54.232.196.184',// 192.168.241.8
+    host:'192.168.2.4',//  192.168.75.854.232.196.184   
     connectTimeout: 4000, // Timeout period
     // Authentication information
     clientId: `emqx_test_${Math.random().toString(16).slice(3)}`,
-    //username: 'emqx_test',
-    //password: 'emqx_test',
+    // username: 'BateadorasVyO',
+    // passwvord: 'Trenes_Argentinos',
+    protocol: 'wss',
     keepalive: 60,
+    key: fs.readFileSync('./certificados/server.key'), // Ajusta la ruta
+    cert: fs.readFileSync('./certificados/server.crt'), // Ajusta la ruta
+    ca: fs.readFileSync('./certificados/rootCA.crt'), // Ajusta la ruta
 }
 
-var client = mqtt.connect('ws://54.232.196.184/mqtt', options); //192.168.241.8
+var client = mqtt.connect('wss://192.168.2.4:8084/mqtt', options); //192.168.241.8
 //Manejar la conexion
 
 
