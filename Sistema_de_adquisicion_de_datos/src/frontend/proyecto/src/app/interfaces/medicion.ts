@@ -6,4 +6,5 @@ export interface Medicion {
     nivel_derecho: number;
     distancia: number;
     idtrabajo2: number;
+    tipoMedicion:number;
 }

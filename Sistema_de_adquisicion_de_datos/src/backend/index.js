@@ -44,6 +44,7 @@ app.use('/registrar', routerRegistrar);
 app.use('/trabajo', routerTrabajo);
 app.use('/cargar-trabajo', routerCargarTrabajo);
 app.use('/medicion', routerMedicion);
+app.use('/mqtt', routerMqtt);
 
 //=======[ Main module code ]==================================================
 

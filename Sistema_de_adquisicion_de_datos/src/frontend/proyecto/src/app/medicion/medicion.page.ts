@@ -3,8 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import * as Chart  from 'chart.js';
 import { Medicion } from '../interfaces/medicion';
 import { MedicionService } from '../services/medicion.service';
-import { SocketService } from "../services/socket.service";
-// import { io } from 'socket.io-client';
+import { Observable, Subscription, interval } from 'rxjs';
+
+
 
 
 
@@ -24,17 +25,21 @@ export class MedicionPage implements OnInit, OnDestroy {
   chartPeralte: any;
   chartNivelIzquierdo: any;
   chartNivelDerecho: any;
- 
+  Observables:Observable<any>
+  subscription: Subscription| null=null;
   @ViewChild('grafAlineacion', { static: true }) grafAlineacion!: ElementRef<HTMLCanvasElement>;
   @ViewChild('grafPeralte', { static: true }) grafPeralte!: ElementRef<HTMLCanvasElement>;
   @ViewChild('grafNivelIzquierdo', { static: true }) grafNivelIzquierdo!: ElementRef<HTMLCanvasElement>;
   @ViewChild('grafNivelDerecho', { static: true }) grafNivelDerecho!: ElementRef<HTMLCanvasElement>;
 
-  constructor(private activateRoutes: ActivatedRoute, private _medicionService:MedicionService, private _socketService: SocketService) {
+  constructor(private activateRoutes: ActivatedRoute, private _medicionService:MedicionService, ) {
     this.id=0;
+    this.Observables=interval(3000);
+    this.subscription ;
   }
 
   ngOnInit() {
+    
     this.id = this.activateRoutes.snapshot.paramMap.get("id");
     console.log('ID del trabajo a mostrar:' + this.id);
     this._medicionService.getResivirMedicion(this.id)
@@ -47,9 +52,7 @@ export class MedicionPage implements OnInit, OnDestroy {
     // this._mqttService.suscribe();
   }
 
-  ngOnDestroy(): void {
-      
-  }
+  
   ngAfterViewInit() {
     
   }
@@ -61,8 +64,18 @@ export class MedicionPage implements OnInit, OnDestroy {
     // this._socketService.on('mqttData', (data) => {
     //   this.updateCharts(data);
     // });
+    if (!this.subscription) {
+      this.subscription = this.Observables.subscribe((value)=>{
+        console.log(value);
+      });  
+    }
+     
+    // this.subscription.unsubscribe();
   }
-
+  ngOnDestroy() {
+  
+    this.subscription?.unsubscribe();    
+  }
   barChartMethod() { 
   const alineacionCtx = this.grafAlineacion.nativeElement.getContext('2d');
   const peralteCtx = this.grafPeralte.nativeElement.getContext('2d');
