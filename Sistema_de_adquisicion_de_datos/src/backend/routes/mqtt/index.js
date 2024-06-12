@@ -10,7 +10,7 @@ const fs = require('fs');
 // const io = require('/..');
 //Enviar datos a la base de datos por medio de la comunicacion mqtt
 // Nombre del topic para la comunicación
-
+var distanciaVieja = 0;
 var resultado;
 var idTrabajo;
 var mqttMessage;
@@ -30,8 +30,8 @@ const options = {
     clientId: `emqx_test_${Math.random().toString(16).slice(3)}`,
     username: 'BateadorasVyO',
     // passwvord: 'Trenes_Argentinos',
-    // protocol: 'wss',
-    // keepalive: 60,
+    protocol: 'wss',
+    keepalive: 60,
     // key: fs.readFileSync('./certificados/client.key'), // Ajusta la ruta    ./certificados/ESP32_1.key
     // cert: fs.readFileSync('./certificados/client.crt'), // Ajusta la ruta   ./certificados/ESP32_1.crt
     // ca: fs.readFileSync('./certificados/ca.crt'), // Ajusta la ruta     './certificados/cacert.crt'
@@ -113,7 +113,17 @@ client.on('message', (topic, message) => {
 });
 
 routerMqtt.get('/', function(req,res){
-
-})
+    console.log("entro a backend de mqtt");
+    if (distanciaVieja<distancia1) {
+        const resultado={
+            "distancia":distancia1,
+            "alienacion":alineacion1,
+            "peralte":peralte1,
+            "nivel_izquierdo":nivel_izquierdo1,
+            "nivel_derecho":nivel_derecho1
+        };
+        res.send(resultado).status(200);    
+    }
+});
 // module.exports = client;
 module.exports = routerMqtt;

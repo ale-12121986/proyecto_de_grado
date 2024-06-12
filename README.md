@@ -1,3 +1,5 @@
+
+```
 sistema_de_adquisición_de_datos/
 │
 ├── backend/
@@ -21,7 +23,7 @@ sistema_de_adquisición_de_datos/
     ├── server.crt
     └── server.key
 
-
+```
 
 
 

@@ -19,6 +19,7 @@ export class MedicionPage implements OnInit, OnDestroy {
   @ViewChild('barCanvas', { static: true }) barCanvas!: ElementRef<HTMLCanvasElement>; 
   id:any;
   barChart: any;
+  medidasTiempoReal:Medicion;
   mediciones:any[]=[];
   xValues:number[]=[];
   chartAlineacion: any;
@@ -36,6 +37,16 @@ export class MedicionPage implements OnInit, OnDestroy {
     this.id=0;
     this.Observables=interval(3000);
     this.subscription ;
+    this.medidasTiempoReal={
+      idMedicion:0,
+      alineacion:0,
+      peralte:0,
+      nivel_izquierdo: 0,
+      nivel_derecho: 0,
+      distancia: 0,
+      idtrabajo2: 0,
+      tipoMedicion:0,
+    }
   }
 
   ngOnInit() {
@@ -61,16 +72,22 @@ export class MedicionPage implements OnInit, OnDestroy {
   }
   
   startListening() {
-    // this._socketService.on('mqttData', (data) => {
-    //   this.updateCharts(data);
-    // });
+
+    if (this.subscription) {
+      this.subscription.unsubscribe();  
+     }
     if (!this.subscription) {
       this.subscription = this.Observables.subscribe((value)=>{
         console.log(value);
+        this._medicionService.getResivirDatoTiempoReal()
+        .then((valorMedicion)=>{
+          this.medidasTiempoReal = valorMedicion;
+          console.log(this.mediciones);
+        })
+        
       });  
     }
-     
-    // this.subscription.unsubscribe();
+    
   }
   ngOnDestroy() {
   

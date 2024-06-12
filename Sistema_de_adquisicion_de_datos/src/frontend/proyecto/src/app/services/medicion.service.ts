@@ -13,7 +13,8 @@ export class MedicionService {
     console.log("se van a enviar los datos de medicion en " + dato);
     return firstValueFrom(this._http.get('http://localhost:8000/medicion/'+ dato));
   }
-  getResivirDatoTiempoReal(dato:Medicion):Promise<any>{
+  getResivirDatoTiempoReal():Promise<any>{
+    console.log("entro en el service de medicion");
     return firstValueFrom(this._http.get('http://localhost:8000/mqtt/'));
   }
 }
