@@ -6,6 +6,19 @@ Este proyecto se encarga de mostrar, guardar y graficar todos los datos de la ge
 3. Para un recorrido de medición se tiene cargar un nuevo recorrido(linea, vía, ramal, progresiva inicial, progresiva final y fecha).
 4. Los datos son recibidos en tiempo real del y son guardados en una base de datos mysql.
 ![alt text](image.png)
+![alt text](image-1.png)
+## Tecnologia.
+### frontend
+1. Angular
+2. Ionic
+3. Utiliza la librería de charts para graficar
+### BACKEND
+1. Node.js version 10
+2. Mysql version 5.7
+3. Phpmyadmin 
+### Broker MQTT 
+emqx version 5.0.26
+EMQX es un broker MQTT de código abierto altamente escalable y permite la creación de un cluster con múltiples nodos lo que facilita el manejo de miles de conexiones, EMQX permite su gestión a través de un dashboard muy completo e integra varios plugins que facilitan el manejo de usuarios y reglas para administrar los permisos de cada uno.
 ```
 sistema_de_adquisición_de_datos/
 │
