@@ -22,6 +22,8 @@ ion-col {
     canvas {
       margin: 20px 0;
       max-width: 100%;
+      background-color: white; // Establece el fondo blanco para el contenedor del canvas
+      background-color: white !important; // Establece el fondo blanco para el canvas
     }
   }
   

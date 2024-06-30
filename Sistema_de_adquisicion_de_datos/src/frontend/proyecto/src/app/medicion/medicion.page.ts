@@ -6,9 +6,8 @@ import Chart from 'chart.js';
 import { ActivatedRoute } from '@angular/router';
 import { MedicionService } from '../services/medicion.service';
 import { AlertController, NavController } from '@ionic/angular';
-// import * as XLSX from 'xlsx';
-
-
+import domtoimage from 'dom-to-image'; // Importar dom-to-image
+;
 @Component({
   selector: 'app-medicion',
   templateUrl: './medicion.page.html',
@@ -327,6 +326,22 @@ sanitizeForCSV(value: any): string {
   convertToCSV(mediciones: any[]) {
     throw new Error('Method not implemented.');
   }
-
-
+  exportChartsAsImages(){
+      this.exportChartAsImage(this.grafAlineacion, 'grafico_alineacion');
+      this.exportChartAsImage(this.grafPeralte, 'grafico_peralte');
+      this.exportChartAsImage(this.grafNivelIzquierdo, 'grafico_nivel_izquierdo');
+      this.exportChartAsImage(this.grafNivelDerecho, 'grafico_nivel_derecho'); 
+  }
+ // Método para exportar la gráfica como imagen
+  exportChartAsImage(chartElement: ElementRef<HTMLCanvasElement>, fileName: string) {
+    domtoimage.toBlob(chartElement.nativeElement).then((blob: any) => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName + '.png'; // Cambia la extensión según el formato deseado (png, jpg, etc.)
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
+  }
 }
