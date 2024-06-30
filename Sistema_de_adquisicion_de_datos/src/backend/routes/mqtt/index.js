@@ -10,6 +10,7 @@ const fs = require('fs');
 // const io = require('/..');
 //Enviar datos a la base de datos por medio de la comunicacion mqtt
 // Nombre del topic para la comunicación
+var constante = 0;
 var distanciaVieja = 0;
 var resultado;
 var idTrabajo;
@@ -24,7 +25,7 @@ const options = {
     port:8083,
     // port:8084,
     clean: true, // retain session
-    host:'192.168.34.8',//  192.168.2.4 192.168.54.8    54.232.196.184   
+    host:'192.168.2.4',// 192.168.226.8  192.168.2.4    54.232.196.184   
     connectTimeout: 4000, // Timeout period
     // Authentication information
     clientId: `emqx_test_${Math.random().toString(16).slice(3)}`,
@@ -41,7 +42,7 @@ const options = {
     // ca: fs.readFileSync('./certificados/cacert.pem'), // Ajusta la ruta     './certificados/cacert.crt'
 }
 
-var client = mqtt.connect('ws://192.168.34.8/mqtt', options); // 192.168.2.4  192.168.75.8     192.168.241.8   54.232.196.184
+var client = mqtt.connect('ws://192.168.2.4/mqtt', options); // 192.168.2.4  192.168.226.8   54.232.196.184
 //Manejar la conexion
 
 //Comunicacion mqtt
@@ -111,16 +112,25 @@ client.on('message', (topic, message) => {
 });
 
 routerMqtt.get('/', function(req,res){
-    console.log("entro a backend de mqtt");
+    
+    constante++;
+    distancia1=constante;
+    alineacion1=constante
+    peralte1=constante;
+    nivel_izquierdo1=constante;
+    nivel_derecho1 =constante;
+
     if (distanciaVieja<distancia1) {
         const resultado={
             "distancia":distancia1,
-            "alienacion":alineacion1,
+            "alineacion":alineacion1,
             "peralte":peralte1,
             "nivel_izquierdo":nivel_izquierdo1,
             "nivel_derecho":nivel_derecho1
         };
-        res.send(resultado).status(200);    
+        console.log(resultado);
+        res.send(resultado).status(200);
+        distancia1=distanciaVieja;    
     }
 });
 // module.exports = client;

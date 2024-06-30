@@ -76,8 +76,10 @@ sistema_de_adquisición_de_datos/
 ├── docker-compose.yml
 │
 └── certificados/
-    ├── server.crt
-    └── server.key
+    ├── client-cert.pem
+    ├── client-key.pem
+    ├── cert.pem
+    └── key.key
 
 ```
 

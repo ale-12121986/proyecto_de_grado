@@ -1,12 +1,12 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import * as Chart  from 'chart.js';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Medicion } from '../interfaces/medicion';
-import { MedicionService } from '../services/medicion.service';
+import { DatoTabla } from "../interfaces/dato-tabla";
 import { Observable, Subscription, interval } from 'rxjs';
-
-
-
+import Chart from 'chart.js';
+import { ActivatedRoute } from '@angular/router';
+import { MedicionService } from '../services/medicion.service';
+import { AlertController, NavController } from '@ionic/angular';
+// import * as XLSX from 'xlsx';
 
 
 @Component({
@@ -14,13 +14,13 @@ import { Observable, Subscription, interval } from 'rxjs';
   templateUrl: './medicion.page.html',
   styleUrls: ['./medicion.page.scss'],
 })
-export class MedicionPage implements OnInit, OnDestroy {
-  
-  @ViewChild('barCanvas', { static: true }) barCanvas!: ElementRef<HTMLCanvasElement>; 
+export class MedicionPage implements OnInit {
+  mostrarTabla: boolean = false;
+  mostrarGrafica: boolean = false;
   id:any;
   barChart: any;
   medidasTiempoReal:Medicion;
-  mediciones:any[]=[];
+  mediciones:DatoTabla[]=[];
   xValues:number[]=[];
   chartAlineacion: any;
   chartPeralte: any;
@@ -28,12 +28,15 @@ export class MedicionPage implements OnInit, OnDestroy {
   chartNivelDerecho: any;
   Observables:Observable<any>
   subscription: Subscription| null=null;
-  @ViewChild('grafAlineacion', { static: true }) grafAlineacion!: ElementRef<HTMLCanvasElement>;
-  @ViewChild('grafPeralte', { static: true }) grafPeralte!: ElementRef<HTMLCanvasElement>;
-  @ViewChild('grafNivelIzquierdo', { static: true }) grafNivelIzquierdo!: ElementRef<HTMLCanvasElement>;
-  @ViewChild('grafNivelDerecho', { static: true }) grafNivelDerecho!: ElementRef<HTMLCanvasElement>;
-
-  constructor(private activateRoutes: ActivatedRoute, private _medicionService:MedicionService, ) {
+  @ViewChild('barCanvas', { static: true }) barCanvas!:ElementRef<HTMLCanvasElement>; 
+  @ViewChild('grafAlineacion', {  }) grafAlineacion!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('grafPeralte', { }) grafPeralte!:ElementRef<HTMLCanvasElement>;
+  @ViewChild('grafNivelIzquierdo', { }) grafNivelIzquierdo!:ElementRef<HTMLCanvasElement>;
+  @ViewChild('grafNivelDerecho', { }) grafNivelDerecho!:ElementRef<HTMLCanvasElement>;
+  constructor(private activateRoutes: ActivatedRoute,
+     private _medicionService:MedicionService, 
+     private alertController: AlertController,
+     private navCtrl: NavController ) {
     this.id=0;
     this.Observables=interval(3000);
     this.subscription ;
@@ -46,66 +49,47 @@ export class MedicionPage implements OnInit, OnDestroy {
       distancia: 0,
       idtrabajo2: 0,
       tipoMedicion:0,
-    }
-  }
+    };
+   }
 
   ngOnInit() {
-    
     this.id = this.activateRoutes.snapshot.paramMap.get("id");
     console.log('ID del trabajo a mostrar:' + this.id);
     this._medicionService.getResivirMedicion(this.id)
     .then((valorMedicion)=>{
       this.mediciones = valorMedicion;
-      // this.barChartMethod();
-      // this.initCharts();
+      
     })
-    .catch((error)=>console.log(error));
-    // this._mqttService.suscribe();
+    .catch((error)=>console.log(error));  
   }
-
-  
-  ngAfterViewInit() {
-    
-  }
-  graficaGuardada(){
-    this.barChartMethod();
-  }
-  
   startListening() {
-
     if (this.subscription) {
       this.subscription.unsubscribe();  
      }
     if (!this.subscription) {
-      this.subscription = this.Observables.subscribe((value)=>{
-        console.log(value);
-        this._medicionService.getResivirDatoTiempoReal()
+      this.barChartMethod();
+      this.subscription = this.Observables.subscribe(()=>{
+      this._medicionService.getResivirDatoTiempoReal()
         .then((valorMedicion)=>{
           this.medidasTiempoReal = valorMedicion;
-          console.log(this.mediciones);
+          this.updateCharts(this.medidasTiempoReal);
         })
-        
       });  
     }
-    
   }
   ngOnDestroy() {
   
     this.subscription?.unsubscribe();    
   }
-  barChartMethod() { 
-  const alineacionCtx = this.grafAlineacion.nativeElement.getContext('2d');
-  const peralteCtx = this.grafPeralte.nativeElement.getContext('2d');
-  const nivelIzquierdoCtx = this.grafNivelIzquierdo.nativeElement.getContext('2d');
-  const nivelDerechoCtx = this.grafNivelDerecho.nativeElement.getContext('2d');
-  const myChartAlineacion = new Chart(this.grafAlineacion.nativeElement,  {
+  barChartMethod() {   
+    this.chartAlineacion = new Chart(this.grafAlineacion.nativeElement,  {
       type: 'line',
       data: {
         labels: this.mediciones.map(objeto=>objeto.distancia),
         datasets: [
           {
             label: 'Alieacion',
-            data: this.mediciones.map(objeto=>objeto.alineacion),//E
+            data: this.mediciones.map(objeto=>objeto.alineacion),
             borderColor: "red",
             fill: "false",
             borderDash: [5, 5] // Línea discontinua
@@ -114,12 +98,12 @@ export class MedicionPage implements OnInit, OnDestroy {
       },
       options: {
         scales: {
-        xAxes:[{
-          scaleLabel: {
-            display: true,
-            labelString: 'Distancia' // Aquí puedes cambiar el título del eje x
-          }
-        }],
+          xAxes:[{
+            scaleLabel: {
+              display: true,
+              labelString: 'Distancia' // Aquí puedes cambiar el título del eje x
+            }
+          }],
           yAxes: [
             {
               ticks: {
@@ -130,14 +114,15 @@ export class MedicionPage implements OnInit, OnDestroy {
         }
       }
     });
-    const myChartPeralte = new Chart(this.grafPeralte.nativeElement, {
+
+    this.chartPeralte = new Chart(this.grafPeralte.nativeElement, {
       type: 'line',
       data: {
         labels: this.mediciones.map(objeto=>objeto.distancia),
         datasets: [
           {
-           label: 'Peralte',
-            data: this.mediciones.map(objeto=>objeto.peralte),//E
+            label: 'Peralte',
+            data: this.mediciones.map(objeto=>objeto.peralte),
             borderColor: "blue",
             fill: "false",
             borderDash: [5, 5] // Línea discontinua
@@ -146,11 +131,11 @@ export class MedicionPage implements OnInit, OnDestroy {
       },
       options: {
         scales: {
-         xAxes:[{
-           scaleLabel: {
-             display: true,
-             labelString: 'Distancia' // Aquí puedes cambiar el título del eje x
-           }
+          xAxes:[{
+            scaleLabel: {
+              display: true,
+              labelString: 'Distancia' // Aquí puedes cambiar el título del eje x
+            }
         }],
           yAxes: [
             {
@@ -163,14 +148,14 @@ export class MedicionPage implements OnInit, OnDestroy {
       }
     });
 
-     const myChartNivelIzquierdo = new Chart(this.grafNivelIzquierdo.nativeElement, {
+      this.chartNivelIzquierdo = new Chart(this.grafNivelIzquierdo.nativeElement, {
       type: 'line',
       data: {
         labels: this.mediciones.map(objeto=>objeto.distancia),
         datasets: [
           {
-           label: 'Nivel Izquierdo',
-            data: this.mediciones.map(objeto=>objeto.nivel_izquierdo),//E
+            label: 'Nivel Izquierdo',
+            data: this.mediciones.map(objeto=>objeto.nivel_izquierdo),
             borderColor: "green",
             fill: "false",
             borderDash: [5, 5] // Línea discontinua
@@ -179,11 +164,11 @@ export class MedicionPage implements OnInit, OnDestroy {
       },
       options: {
         scales: {
-         xAxes:[{
-           scaleLabel: {
-             display: true,
-             labelString: 'Distancia' // Aquí puedes cambiar el título del eje x
-           }
+          xAxes:[{
+            scaleLabel: {
+              display: true,
+              labelString: 'Distancia' // Aquí puedes cambiar el título del eje x
+            }
         }],
           yAxes: [
             {
@@ -195,14 +180,15 @@ export class MedicionPage implements OnInit, OnDestroy {
         }
       }
     });
-    const myChartNivelDerecho = new Chart(this.grafNivelDerecho.nativeElement, {
+
+    this.chartNivelDerecho = new Chart(this.grafNivelDerecho.nativeElement, {
       type: 'line',
       data: {
         labels: this.mediciones.map(objeto=>objeto.distancia),
         datasets: [
           {
-           label: 'Nivel derecho',
-            data: this.mediciones.map(objeto=>objeto.nivel_derecho),//E
+            label: 'Nivel derecho',
+            data: this.mediciones.map(objeto=>objeto.nivel_derecho),
             borderColor: "purple",
             fill: "false",
             borderDash: [5, 5] // Línea discontinua
@@ -211,11 +197,11 @@ export class MedicionPage implements OnInit, OnDestroy {
       },
       options: {
         scales: {     
-         xAxes:[{
-           scaleLabel: {
-             display: true,
-             labelString: 'Distancia' // Aquí puedes cambiar el título del eje x
-           }
+          xAxes:[{
+            scaleLabel: {
+              display: true,
+              labelString: 'Distancia' // Aquí puedes cambiar el título del eje x
+            }
         }],
           yAxes: [
             {
@@ -228,12 +214,50 @@ export class MedicionPage implements OnInit, OnDestroy {
       }
     });
   }
-  updateCharts(data:any) {
+
+  graficaGuardada(){
+
+    // Update Alineacion Chart
+    this.chartAlineacion.data.labels = this.mediciones.map(objeto=>objeto.distancia);
+    this.chartAlineacion.data.datasets[0].data = this.mediciones.map(objeto=>objeto.alineacion);
+    this.chartAlineacion.update();
+  
+    // Update Peralte Chart
+    this.chartPeralte.data.labels = this.mediciones.map(objeto=>objeto.distancia);
+    this.chartPeralte.data.datasets[0].data = this.mediciones.map(objeto=>objeto.peralte);
+    this.chartPeralte.update();
+  
+    // Update Nivel Izquierdo Chart
+    this.chartNivelIzquierdo.data.labels = this.mediciones.map(objeto=>objeto.distancia);
+    this.chartNivelIzquierdo.data.datasets[0].data = this.mediciones.map(objeto=>objeto.nivel_izquierdo);
+    this.chartNivelIzquierdo.update();
+  
+    // Update Nivel Derecho Chart
+    this.chartNivelDerecho.data.labels = this.mediciones.map(objeto=>objeto.distancia);
+    this.chartNivelDerecho.data.datasets[0].data  = this.mediciones.map(objeto=> objeto.nivel_derecho);
+    this.chartNivelDerecho.update();
+     
+    }
+  ngAfterViewInit(){  
+    
+  }
+  mostrarDatosGrafico(){
+    this.barChartMethod();  
+    this.mostrarGrafica = true;
+    this.mostrarTabla = false;
+    this.graficaGuardada();
+  }
+  mostrarDatosTabla(){
+    console.log(this.mediciones);
+    this.mostrarGrafica = false;
+    this.mostrarTabla = true;
+    }
+  updateCharts(data:Medicion) {
     // Update Alineacion Chart
     this.chartAlineacion.data.labels.push(data.distancia);
     this.chartAlineacion.data.datasets[0].data.push(data.alineacion);
     this.chartAlineacion.update();
-
+    
     // Update Peralte Chart
     this.chartPeralte.data.labels.push(data.distancia);
     this.chartPeralte.data.datasets[0].data.push(data.peralte);
@@ -249,5 +273,60 @@ export class MedicionPage implements OnInit, OnDestroy {
     this.chartNivelDerecho.data.datasets[0].data.push(data.nivel_derecho);
     this.chartNivelDerecho.update();
   }
+
+  atras(){
+    this.navCtrl.back();
+  }
+
+  // Función para convertir datos a formato CSV
+  unparseCSV(data: any[]): string {
+    if (data.length === 0) {
+      return '';
+    }
+
+    const headers = Object.keys(data[0]);
+    const csv = [headers.join(',')];
+
+    for (const entry of data) {
+      const line = headers.map(header => this.sanitizeForCSV(entry[header])).join(',');
+      csv.push(line);
+  }
+
+  return csv.join('\n');  
+  }
+
+// Función para limpiar y escapar datos para el formato CSV
+sanitizeForCSV(value: any): string {
+  if (typeof value === 'string') {
+    // Si el valor contiene comas, comillas dobles o saltos de línea, lo encerramos entre comillas dobles
+    if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+      return `"${value.replace(/"/g, '""')}"`;
+    } else {
+      return value;
+    }
+  } else {
+    return value.toString();
+  }
+}
+
+
+
+  exportToExcel() {
+    console.log(this.mediciones);
+    let csvData = this.unparseCSV(this.mediciones);
+    // const csvData = this.convertToCSV(this.mediciones);
+    var blob = new Blob([csvData]);
+    var a = window.document.createElement("a");
+    a.href = window.URL.createObjectURL(blob);
+    a.download = "newdata.csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  
+  }
+  convertToCSV(mediciones: any[]) {
+    throw new Error('Method not implemented.');
+  }
+
 
 }

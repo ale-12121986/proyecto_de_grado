@@ -1,9 +1,3 @@
-<ion-header [translucent]="true">
-  <ion-toolbar color = "mycolor">
-    <ion-title>medicion</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
@@ -13,22 +7,81 @@
   
   <ion-grid>
     <ion-row>
-      <ion-col size="4">
-        <ion-button expand="block" [routerLink] = "['/cargar-trabajo',id]">Agregar</ion-button>
+      <ion-col size="3">
+        <ion-button expand="block" [routerLink]="['/cargar-trabajo', id]">Agregar</ion-button>
       </ion-col>
-      <ion-col size="4">
-        <ion-button expand="block" (click)="graficaGuardada()">Ver trabajo realizado</ion-button>
+      <ion-col size="3">
+        <ion-button expand="block" (click)="mostrarDatosGrafico()">Ver gráfica</ion-button>
       </ion-col>
-      <ion-col size="4">
-        <ion-button expand="block"(click)="startListening()" >Ver trabajo en tiempo real</ion-button>
+      <ion-col size="3">
+        <ion-button expand="block" (click)="mostrarDatosTabla()">Ver tabla</ion-button>
+      </ion-col>
+      <ion-col size="3">
+        <ion-button expand="block" (click)="startListening()">Ver en tiempo real</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
-  <div class="grafico">
-  <canvas #grafAlineacion style="width: 300px; height: 50px;"></canvas>
-  <canvas #grafPeralte style="width: 300px; height: 50px;"></canvas>
-  <canvas #grafNivelIzquierdo style="width: 300px; height: 50px;"></canvas>
-  <canvas #grafNivelDerecho style="width: 300px; height: 50px;"></canvas>
-  </div>
 
+  <ion-card>
+    <ion-card-content [ngStyle]="{'display': mostrarTabla ? '' : 'none'}">
+      <ion-card-header>
+        <ion-card-title>Tabla de Mediciones</ion-card-title>
+      </ion-card-header>
+      <table class="table">
+        <thead>
+          <tr class="table-header">
+            <th>Distancia</th>
+            <th>Alineación</th>
+            <th>Peralte</th>
+            <th>Nivel Izquierdo</th>
+            <th>Nivel Derecho</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let dato of mediciones" class="table-row">
+            <td>{{ dato.distancia }}</td>
+            <td>{{ dato.alineacion }}</td>
+            <td>{{ dato.peralte }}</td>
+            <td>{{ dato.nivel_izquierdo }}</td>
+            <td>{{ dato.nivel_derecho }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="2" offset="5">
+            <ion-button expand="block" (click)="exportToExcel()">exportar tabla</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card [ngStyle]="{'display': mostrarGrafica ? '' : 'none'}">
+    <ion-card-header>
+      <ion-card-title>Gráfica de Mediciones</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="grafico">
+        <canvas #grafAlineacion style="width: 300px; height: 100px;"></canvas>
+        <canvas #grafPeralte style="width: 300px; height: 100px;"></canvas>
+        <canvas #grafNivelIzquierdo style="width: 300px; height: 100px;"></canvas>
+        <canvas #grafNivelDerecho style="width: 300px; height: 100px;"></canvas>
+      </div>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="2" offset="5">
+            <ion-button expand="block">exportar grafico</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="2" offset="5">
+        <ion-button expand="block"(click)="atras()">atras</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

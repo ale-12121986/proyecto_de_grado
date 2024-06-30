@@ -8,3 +8,4 @@ export interface Trabajo {
     idBateadora:number;
     fecha:Date;
 }
+

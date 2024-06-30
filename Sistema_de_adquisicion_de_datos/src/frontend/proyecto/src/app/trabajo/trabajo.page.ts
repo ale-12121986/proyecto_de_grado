@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Trabajo } from '../interfaces/trabajo';
 import { TrabajoService } from '../services/trabajo.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Trabajo } from '../interfaces/trabajo';
+import { AlertController, NavController } from '@ionic/angular';
 import { CargarTrabajoPage } from '../cargar-trabajo/cargar-trabajo.page';
-import { state } from '@angular/animations';
+
 @Component({
   selector: 'app-trabajo',
   templateUrl: './trabajo.page.html',
@@ -22,12 +23,22 @@ export class TrabajoPage implements OnInit {
     idBateadora:0,
     fecha:new Date()
   };
-  constructor(private _trabajoService: TrabajoService, private activateRoutes: ActivatedRoute,private router:Router) {
+
+  constructor(
+    private _trabajoService: TrabajoService,
+    private activateRoutes: ActivatedRoute,
+    private router:Router, 
+    private alertController: AlertController,
+    private navCtrl: NavController) { 
     this.id = 0;
   }
 
   ngOnInit() {
     this.id = this.activateRoutes.snapshot.paramMap.get("id");
+
+    if(this.id == null){
+    
+    }
     console.log('ID del trabajo a mostrar:' + this.id);
     this._trabajoService.getDatosTrabajo(this.id)
     .then((listaDeTrabajo)=>{
@@ -35,7 +46,7 @@ export class TrabajoPage implements OnInit {
       console.log(listaDeTrabajo);
     })
     .catch((error)=>{
-      console.log(error)
+      console.log("prueba");
     })
   }
   guardar(){
@@ -60,4 +71,38 @@ export class TrabajoPage implements OnInit {
 
   }
 
+  atras(){
+    this.navCtrl.back();
+  }
+  async buscar(){
+    const alert = await this.alertController.create({
+      header:'buscar un trabajo',
+      inputs:[
+        { name:"linea", type:"text", placeholder:"Linea"},
+        { name:"via", type:"text", placeholder:"Via"},
+        { name:"ramal", type:"text", placeholder:"Ramal"},
+        { name:"progresivaInical", type:"number",placeholder:"Ramal"},
+        { name:"progresivaFinal", type:"number", placeholder:"Ramal"},
+        { name:"fecha", type:"date", placeholder:"Ramal"}
+      ],
+      buttons:[
+        {
+        text:'Cancelar',
+        role:'cancel',
+        handler:()=>{console.log('Accion cancelada');}
+        },
+        {
+          text:'Aceptar',
+          handler:(data:Trabajo)=>{
+            this._trabajoService.setBuscarTrabajo(data)
+            .then((listaTrabajo)=>{
+              this.datosTrabajo = listaTrabajo; // Actualizar la lista de trabajos
+          })
+          .catch((error)=>{console.log(error)});
+          }
+        } 
+      ]
+    });
+    await alert.present();
+  }
 }

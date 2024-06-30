@@ -1,12 +1,30 @@
-ion-toolbar{
-    background-color: var(--ion-color-mycolor);
+.table {
+  width: 100%;
+  border-collapse: collapse;
 }
-ion-col {
-    background-color: var(--ion-color-mycolor);
-    border: solid 1px #fff;
-    color: black;
-    text-align: center;
-  }
-  .contenido ion-col{
-    background-color: white;
-  }
+
+.table-header {
+  background-color: #87CEEB; /* Color azul celeste */
+  color: white; /* Color del texto */
+  text-align: center;
+}
+
+.table-row td {
+  text-align: center;
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+.action-buttons {
+ 
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+ion-button {
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+}

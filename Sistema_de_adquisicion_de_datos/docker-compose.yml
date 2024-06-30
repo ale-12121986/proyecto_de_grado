@@ -13,7 +13,8 @@ services:
             -                   ./src/frontend/proyecto:/src/frontend/proyecto
             -                    /src/frontend/proyecto/node_modules
         command:               ionic serve --external --live-reload=true --progress=true --lab --no-open
-
+        environment:
+            -                  CHOKIDAR_USEPOLLING=true
 
         #command: ionic serve --open --live-reload=true --progress=true
 

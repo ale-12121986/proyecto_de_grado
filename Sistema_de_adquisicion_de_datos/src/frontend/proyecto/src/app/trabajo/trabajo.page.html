@@ -6,51 +6,64 @@
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
-    <ion-toolbar >
+    <ion-toolbar>
       <ion-title size="large">trabajo</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-grid>
     <ion-row>
-      <ion-col size="4">
+      <ion-col size="2">
         <ion-button expand="block" [routerLink] = "['/cargar-trabajo',id]">Agregar</ion-button>
       </ion-col>
-      <ion-col size="4">
-        <ion-button expand="block">Botón 2</ion-button>
+      <ion-col size="2">
+        <ion-button expand="block"(click) = "buscar()">Buscar</ion-button>
       </ion-col>
-      <ion-col size="4">
+      <!-- <ion-col size="4">
         <ion-button expand="block">Botón 3</ion-button>
-      </ion-col>
+      </ion-col> -->
     </ion-row>
   </ion-grid>
+  <ion-card>
+    <table class="table">
+      <thead>
+        <tr class="table-header">
+          <th>Linea</th>
+          <th>Via</th>
+          <th>Ramal</th>
+          <th>Progresiva Inicial</th>
+          <th>Progresiva Final</th>
+          <th>Fecha</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let dato of datosTrabajo" class="table-row">
+          <td>{{ dato.linea }}</td>
+          <td>{{ dato.via }}</td>
+          <td>{{ dato.ramal }}</td>
+          <td>{{ dato.progresivaInicial }}</td>
+          <td>{{ dato.progresivaFinal }}</td>
+          <td>{{ dato.fecha | date: 'dd/MM/yyyy' }}</td>
+          <td class="action-buttons">
+            <ion-button size="small" (click)="eliminar(dato.idTrabajo)" color="danger" >
+              <ion-icon name="trash"></ion-icon>
+            </ion-button>
+            <ion-button size="small" (click)="modificar(dato)" color="primary" >
+              <ion-icon name="create"></ion-icon>
+            </ion-button>
+            <ion-button size="small" [routerLink]="['/medicion', dato.idTrabajo]" color="success" >
+              <ion-icon name="speedometer"></ion-icon>
+            </ion-button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ion-card>
   <ion-grid>
     <ion-row>
-      <ion-col>Linea</ion-col>
-      <ion-col>Via</ion-col>
-      <ion-col>Ramal</ion-col>
-      <ion-col>Progresiva Inicial</ion-col>
-      <ion-col>Progresiva Final</ion-col>
-      <ion-col>Fecha</ion-col>
-      <ion-col size="2">Acciones</ion-col>
-    </ion-row>
-    <ion-row *ngFor="let dato of datosTrabajo" class="contenido">
-      <ion-col>{{ dato.linea }}</ion-col>
-      <ion-col>{{ dato.via }}</ion-col>
-      <ion-col>{{ dato.ramal }}</ion-col>
-      <ion-col>{{ dato.progresivaInicial }}</ion-col>
-      <ion-col>{{ dato.progresivaFinal }}</ion-col>
-      <ion-col>{{ dato.fecha|date:'dd/MM/yyyy' }}</ion-col>
-      <ion-button shape="round"  (click)="eliminar(dato.idTrabajo)" color="danger">
-        <ion-icon name="trash"></ion-icon>
-      </ion-button>
-      <ion-button shape="round"  (click)="modificar(dato)" color="primary">
-        <ion-icon name="create"></ion-icon>
-      </ion-button>
-      <ion-button shape="round"  [routerLink] = "['/medicion',dato.idTrabajo]" color="success">
-        <ion-icon name="speedometer"></ion-icon>
-      </ion-button>
+      <ion-col size="2" offset="5">
+        <ion-button expand="block"(click)="atras()">atras</ion-button>
+      </ion-col>
     </ion-row>
   </ion-grid>
-  
-
 </ion-content>

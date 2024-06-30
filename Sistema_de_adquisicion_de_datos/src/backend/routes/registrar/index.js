@@ -19,6 +19,7 @@ routerRegistrar.get('/', function(req, res) {
 routerRegistrar.post('/datos',function(req,res){
     console.log("Entro a insertar");
     var parametros= req.body;
+    
     const sqlQuery = 'INSERT INTO bateadora( numeroBateadora, jefeEquipo, supervisor) VALUES (?, ?, ?);'
     pool.query(sqlQuery, [parametros.numeroBateadora, parametros.jefeEquipo, parametros.supervisor], function(error, results)  {    
         if (error) {
@@ -39,6 +40,19 @@ routerRegistrar.post('/eliminar',function(req,res){
             return;
         }
         console.log("Se elimino el dato");
+        res.send();
+    });
+})
+routerRegistrar.post('/modificar',function(req,res){
+    const valor = req.body;
+    console.log(valor);
+    const sqlQuery = 'UPDATE equipos SET jefeEquipo = ?, supervisor = ? WHERE numeroBateadora = ?';
+    pool.query(sqlQuery, [valor.jefeEquipo, valor.supervisor,valor.numeroBateadora], function(error, results)  {    
+        if (error) {
+            res.send(error).status(400);
+            return;
+        }
+        console.log("Se modifico el dato");
         res.send();
     });
 })

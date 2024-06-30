@@ -4,4 +4,3 @@ export interface Bateadora {
     jefeEquipo: string;
     supervisor:string;
 }
-

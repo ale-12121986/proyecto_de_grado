@@ -8,3 +8,5 @@ export interface Medicion {
     idtrabajo2: number;
     tipoMedicion:number;
 }
+
+

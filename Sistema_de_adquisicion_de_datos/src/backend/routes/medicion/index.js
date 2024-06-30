@@ -8,7 +8,7 @@ var pool = require('../../mysql-connector');
 routerMedicion.get('/:buscar', function (req, res) {
     const valor = req.params.buscar;
     console.log("entro al back de medicion con el valor ",valor);
-    const sqlQuery = "SELECT * FROM medicion WHERE idtrabajo2 = ?"
+    const sqlQuery = "SELECT distancia, alineacion, peralte, nivel_izquierdo, nivel_derecho FROM medicion WHERE idtrabajo2 = ?"
 
     pool.query(sqlQuery, [valor], function(error,results){
         if (error) {

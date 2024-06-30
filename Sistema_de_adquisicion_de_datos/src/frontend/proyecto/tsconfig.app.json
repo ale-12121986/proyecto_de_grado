@@ -3,13 +3,19 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": []
+    "types": [],
+    "target": "es5",
+    "module": "esnext", // o "commonjs"
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
   },
   "files": [
     "src/main.ts",
     "src/polyfills.ts"
   ],
   "include": [
-    "src/**/*.d.ts"
+    "src/**/*.d.ts",
+    "chartjs.d.ts"
   ]
 }
