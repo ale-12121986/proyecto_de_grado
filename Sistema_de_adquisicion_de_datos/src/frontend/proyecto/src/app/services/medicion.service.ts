@@ -8,12 +8,11 @@ import { firstValueFrom } from 'rxjs';
 export class MedicionService {
 
   constructor(private _http:HttpClient) { }
+
   getResivirMedicion(dato:any):Promise<any>{
-    console.log("se van a enviar los datos de medicion en " + dato);
-    return firstValueFrom(this._http.get('http://localhost:8000/medicion/'+ dato));
+    return firstValueFrom(this._http.post('http://localhost:8000/medicion/buscar', dato));
   }
   getResivirDatoTiempoReal():Promise<any>{
-    console.log("entro en el service de medicion");
     return firstValueFrom(this._http.get('http://localhost:8000/mqtt/'));
   }
 }

@@ -5,12 +5,10 @@ const routerMedicion = express.Router()
 var pool = require('../../mysql-connector');
 
 
-routerMedicion.get('/:buscar', function (req, res) {
-    const valor = req.params.buscar;
-    console.log("entro al back de medicion con el valor ",valor);
-    const sqlQuery = "SELECT distancia, alineacion, peralte, nivel_izquierdo, nivel_derecho FROM medicion WHERE idtrabajo2 = ?"
-
-    pool.query(sqlQuery, [valor], function(error,results){
+routerMedicion.post('/buscar', function (req, res) {
+    const valor = req.body;
+    const sqlQuery = "SELECT distancia, alineacion, peralte, nivel_izquierdo, nivel_derecho FROM medicion WHERE idtrabajo2 = ? AND tipoMedicion =?"
+    pool.query(sqlQuery, [valor.idMedicion, valor.tipoMedicion], function(error,results){
         if (error) {
             res.send(error).status(400);
             return;
@@ -19,8 +17,6 @@ routerMedicion.get('/:buscar', function (req, res) {
         res.send(results).status(200);
     });
 });
-
-
 
 
 module.exports=routerMedicion;

@@ -1,6 +1,12 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>registrar</ion-title>
+    <ion-buttons slot="end">
+      <!-- <ion-button (click)="presentPopover($event)"> -->
+        <ion-icon slot="icon-only" name="person-circle"></ion-icon>
+        <!-- <ion-label>{{ usuario.nombre }} {{ usuario.apellido }}</ion-label> -->
+      <!-- </ion-button> -->
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -13,7 +19,8 @@
   <ion-grid>
     <ion-row>
       <ion-col size="12">
-        <ion-button expand="full" (click)="guardar()">Registrar</ion-button>
+        
+        <ion-button expand="block" (click)="guardar()">Registrar</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -21,7 +28,11 @@
     <ion-item *ngFor="let registros of equipos" 
      detail="">
     <ion-icon slot="start" name ="train"></ion-icon>
-      <ion-label>{{registros.numeroBateadora}}</ion-label>
+    <ion-label>
+      <h2>{{registros.numeroBateadora}}</h2>
+      <p style="font-size: smaller;">Jefe de Equipo: {{registros.jefeEquipo}}</p>
+      <p style="font-size: smaller;">Supervisor: {{registros.supervisor}}</p>
+    </ion-label>
       <ion-button shape="round"  (click)="eliminar(registros.idbateadora)" color="danger">
         <ion-icon name="trash"></ion-icon>
       </ion-button>

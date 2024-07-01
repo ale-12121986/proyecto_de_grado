@@ -14,6 +14,7 @@ import domtoimage from 'dom-to-image'; // Importar dom-to-image
   styleUrls: ['./medicion.page.scss'],
 })
 export class MedicionPage implements OnInit {
+  valorABuscar:Medicion;
   mostrarTabla: boolean = false;
   mostrarGrafica: boolean = false;
   id:any;
@@ -32,10 +33,9 @@ export class MedicionPage implements OnInit {
   @ViewChild('grafPeralte', { }) grafPeralte!:ElementRef<HTMLCanvasElement>;
   @ViewChild('grafNivelIzquierdo', { }) grafNivelIzquierdo!:ElementRef<HTMLCanvasElement>;
   @ViewChild('grafNivelDerecho', { }) grafNivelDerecho!:ElementRef<HTMLCanvasElement>;
-  constructor(private activateRoutes: ActivatedRoute,
-     private _medicionService:MedicionService, 
-     private alertController: AlertController,
-     private navCtrl: NavController ) {
+
+  constructor(private activateRoutes: ActivatedRoute, private _medicionService:MedicionService,private alertController: AlertController,
+              private navCtrl: NavController ) {
     this.id=0;
     this.Observables=interval(3000);
     this.subscription ;
@@ -49,17 +49,21 @@ export class MedicionPage implements OnInit {
       idtrabajo2: 0,
       tipoMedicion:0,
     };
+    this.valorABuscar={
+      idMedicion:0,
+      alineacion:0,
+      peralte:0,
+      nivel_izquierdo: 0,
+      nivel_derecho: 0,
+      distancia: 0,
+      idtrabajo2: 0,
+      tipoMedicion:0,
+    }
    }
-
+   
   ngOnInit() {
-    this.id = this.activateRoutes.snapshot.paramMap.get("id");
-    console.log('ID del trabajo a mostrar:' + this.id);
-    this._medicionService.getResivirMedicion(this.id)
-    .then((valorMedicion)=>{
-      this.mediciones = valorMedicion;
-      
-    })
-    .catch((error)=>console.log(error));  
+    this.id = this.activateRoutes.snapshot.paramMap.get("id"); 
+    this.valorABuscar.idMedicion = this.id;
   }
   startListening() {
     if (this.subscription) {
@@ -240,17 +244,98 @@ export class MedicionPage implements OnInit {
   ngAfterViewInit(){  
     
   }
-  mostrarDatosGrafico(){
-    this.barChartMethod();  
-    this.mostrarGrafica = true;
-    this.mostrarTabla = false;
-    this.graficaGuardada();
+  async mostrarDatosGrafico(){
+    const alert = await this.alertController.create({
+      header:'indicar recorrido',
+      buttons:[
+        {
+          text:'Recorrido 1',
+          handler:()=>{
+            this.valorABuscar.tipoMedicion = 0;
+            this.buscarMedicion(this.valorABuscar);
+            this.barChartMethod();
+            this.mostrarGrafica = true;
+            this.mostrarTabla = false;
+            this.graficaGuardada();
+          }
+        },
+        {
+          text:'Recorrido 2',
+          handler:()=>{
+            this.valorABuscar.tipoMedicion = 1;
+            this.buscarMedicion(this.valorABuscar);
+            this.barChartMethod();
+            this.mostrarGrafica = true;
+            this.mostrarTabla = false;
+            this.graficaGuardada();
+          }
+        },
+        {
+          text:'Recorrido 3',
+          handler:()=>{
+            this.valorABuscar.tipoMedicion = 2;
+            this.buscarMedicion(this.valorABuscar);
+            this.barChartMethod();
+            this.mostrarGrafica = true;
+            this.mostrarTabla = false;
+            this.graficaGuardada();
+          }
+        },
+      ]
+    }); 
+    await alert.present();  
   }
-  mostrarDatosTabla(){
-    console.log(this.mediciones);
-    this.mostrarGrafica = false;
-    this.mostrarTabla = true;
-    }
+  
+  buscarMedicion(valor:Medicion){
+    console.log(valor);
+    this._medicionService.getResivirMedicion(valor)
+    .then((valorMedicion)=>{
+      this.mediciones = valorMedicion;
+      
+    })
+    .catch((error)=>console.log(error))
+  }
+
+  async tipoRecorrido(){
+    
+  }
+
+  async mostrarDatosTabla(){
+    const alert = await this.alertController.create({
+      header:'indicar recorrido',
+      buttons:[
+        {
+          text:'Recorrido 1',
+          handler:()=>{
+            this.valorABuscar.tipoMedicion = 0;
+            this.buscarMedicion(this.valorABuscar);
+            this.mostrarGrafica = false;
+            this.mostrarTabla = true;
+          }
+        },
+        {
+          text:'Recorrido 2',
+          handler:()=>{
+            this.valorABuscar.tipoMedicion = 1;
+            this.buscarMedicion(this.valorABuscar);
+            this.mostrarGrafica = false;
+            this.mostrarTabla = true;
+          }
+        },
+        {
+          text:'Recorrido 3',
+          handler:()=>{
+            this.valorABuscar.tipoMedicion = 2;
+            this.buscarMedicion(this.valorABuscar);
+            this.mostrarGrafica = false;
+            this.mostrarTabla = true;
+          }
+        },
+      ]
+    }); 
+    await alert.present();  
+
+  }
   updateCharts(data:Medicion) {
     // Update Alineacion Chart
     this.chartAlineacion.data.labels.push(data.distancia);
@@ -295,20 +380,18 @@ export class MedicionPage implements OnInit {
   }
 
 // Función para limpiar y escapar datos para el formato CSV
-sanitizeForCSV(value: any): string {
-  if (typeof value === 'string') {
-    // Si el valor contiene comas, comillas dobles o saltos de línea, lo encerramos entre comillas dobles
-    if (value.includes(',') || value.includes('"') || value.includes('\n')) {
-      return `"${value.replace(/"/g, '""')}"`;
+  sanitizeForCSV(value: any): string {
+    if (typeof value === 'string') {
+      // Si el valor contiene comas, comillas dobles o saltos de línea, lo encerramos entre comillas dobles
+      if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+        return `"${value.replace(/"/g, '""')}"`;
+      } else {
+        return value;
+      }
     } else {
-      return value;
+      return value.toString();
     }
-  } else {
-    return value.toString();
   }
-}
-
-
 
   exportToExcel() {
     console.log(this.mediciones);
