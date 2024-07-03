@@ -1,19 +1,9 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>registrar</ion-title>
-    <ion-buttons slot="end">
-      <!-- <ion-button (click)="presentPopover($event)"> -->
-        <ion-icon slot="icon-only" name="person-circle"></ion-icon>
-        <!-- <ion-label>{{ usuario.nombre }} {{ usuario.apellido }}</ion-label> -->
-      <!-- </ion-button> -->
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
+<app-header [nombre]="nombre" [apellido]="apellido"></app-header>
 <ion-content [fullscreen]="true">
+  
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">registrar</ion-title>
+      <ion-title size="large"> registrar</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-grid>
@@ -33,13 +23,13 @@
       <p style="font-size: smaller;">Jefe de Equipo: {{registros.jefeEquipo}}</p>
       <p style="font-size: smaller;">Supervisor: {{registros.supervisor}}</p>
     </ion-label>
-      <ion-button shape="round"  (click)="eliminar(registros.idbateadora)" color="danger">
+      <ion-button shape="round"  (click)="eliminar(registros.idbateadora)" color="danger" size="default">
         <ion-icon name="trash"></ion-icon>
       </ion-button>
-      <ion-button shape="round"  (click)="modificar(registros.idbateadora)" color="primary">
+      <ion-button shape="round"  (click)="modificar(registros.idbateadora)" color="primary" size="default">
         <ion-icon name="create"></ion-icon>
       </ion-button>
-      <ion-button shape="round"  [routerLink] = "['/trabajo',registros.idbateadora]" color="success">
+      <ion-button shape="round"  [routerLink] = "['/trabajo',registros.idbateadora,prueba]" color="success" size="default">
         <ion-icon name="list"></ion-icon>
       </ion-button>
     </ion-item>

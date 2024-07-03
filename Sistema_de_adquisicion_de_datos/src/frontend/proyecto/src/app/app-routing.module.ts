@@ -8,15 +8,15 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'registrar',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {
-    path: 'registrar',
+    path: 'registrar/:legajo',
     loadChildren: () => import('./registrar/registrar.module').then( m => m.RegistrarPageModule)
   },
   {
-    path: 'trabajo/:id',
+    path: 'trabajo/:id/:param',
     loadChildren: () => import('./trabajo/trabajo.module').then( m => m.TrabajoPageModule)
   },
   {
@@ -26,6 +26,10 @@ const routes: Routes = [
   {
     path: 'medicion/:id',
     loadChildren: () => import('./medicion/medicion.module').then( m => m.MedicionPageModule)
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   },
 ];
 

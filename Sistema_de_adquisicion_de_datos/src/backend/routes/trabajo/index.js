@@ -6,7 +6,7 @@ var pool = require('../../mysql-connector');
 
 routerTrabajo.get('/:id', function(req, res) {
     const id = req.params.id;
-    console.log("el dato para consultar en la base de datos", id);
+    // console.log("el dato para consultar en la base de datos", id);
     const sqlQuery = 'SELECT idTrabajo, `fecha`, `via`, `ramal`, `progresivaInicial`, `progresivaFinal`, `linea` FROM `trabajo` WHERE `idbateadora` = ? ORDER BY fecha DESC;';
 
     pool.query(sqlQuery, [id], function(error, results)  {    

@@ -14,7 +14,8 @@ const routerTrabajo = require('./routes/trabajo');
 const routerCargarTrabajo = require('./routes/cargar-trabajo');
 const routerMedicion = require('./routes/medicion');
 const routerMqtt = require('./routes/mqtt');
-// const io = require('..backend/IoInstance');
+const routerLogin= require('./routes/login');
+
 
 var corsOptions = {
     origin: '*',
@@ -45,7 +46,7 @@ app.use('/trabajo', routerTrabajo);
 app.use('/cargar-trabajo', routerCargarTrabajo);
 app.use('/medicion', routerMedicion);
 app.use('/mqtt', routerMqtt);
-
+app.use('/login',routerLogin);
 //=======[ Main module code ]==================================================
 
 app.get('/', function(req, res, next) {

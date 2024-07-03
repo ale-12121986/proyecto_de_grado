@@ -13,17 +13,11 @@ import { CargarTrabajoPage } from '../cargar-trabajo/cargar-trabajo.page';
 export class TrabajoPage implements OnInit {
   id: any;
   datosTrabajo: Trabajo[]=[];
-  trabajo:Trabajo={
-    idTrabajo:0,
-    linea:"",
-    ramal:"",
-    via:"",
-    progresivaInicial:0,
-    progresivaFinal:0,
-    idBateadora:0,
-    fecha:new Date()
-  };
-
+  nombre: string = 'Nombre del Usuario'; // Ejemplo de inicialización de nombre
+  apellido: string = 'Apellido del Usuario'; // Ejemplo de inicialización de apellido
+  trabajo:Trabajo={idTrabajo:0, linea:"", ramal:"", via:"", progresivaInicial:0, progresivaFinal:0, idBateadora:0,
+     fecha:new Date()};
+  prueba:any;
   constructor(
     private _trabajoService: TrabajoService,
     private activateRoutes: ActivatedRoute,
@@ -31,11 +25,27 @@ export class TrabajoPage implements OnInit {
     private alertController: AlertController,
     private navCtrl: NavController) { 
     this.id = 0;
+    this.prueba="";
   }
 
   ngOnInit() {
     this.id = this.activateRoutes.snapshot.paramMap.get("id");
-
+    this.prueba = this.activateRoutes.snapshot.paramMap.get("param");
+    if (this.prueba) {
+      try {
+        const usuarioObj = JSON.parse(this.prueba)[0];
+        this.nombre = usuarioObj.nombre;
+        this.apellido = usuarioObj.apellido;
+        // this.nombre= this.prueba.nombre;
+        // this.apellido= this.prueba.apellido;
+        this.prueba ={nombre:this.nombre, apellido:this.apellido};
+        console.log("datos q me llegaron de la clave trabajo " + this.prueba + this.nombre + " " + this.apellido);
+      } catch (error) {
+        console.error("Error al parsear el JSON:", error);
+      }
+    } else {
+      console.error("No se encontró 'legajo' en el paramMap.");
+    }
     if(this.id == null){
     
     }

@@ -1,0 +1,11 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Trenes Argentinos</ion-title>
+    <ion-buttons slot="end" (click)="presentPopover($event)">
+      <div class="user-info">
+        <ion-icon name="person-circle"></ion-icon>
+        <span>{{ nombre }} {{ apellido }}</span>
+      </div>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>

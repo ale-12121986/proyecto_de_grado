@@ -8,12 +8,15 @@ import { RegistrarPageRoutingModule } from './registrar-routing.module';
 
 import { RegistrarPage } from './registrar.page';
 
+import { HeaderModule } from '../header/header.module'; // Importa HeaderModule
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RegistrarPageRoutingModule
+    RegistrarPageRoutingModule,
+    HeaderModule // Asegúrate de incluir HeaderModule aquí
   ],
   declarations: [RegistrarPage]
 })

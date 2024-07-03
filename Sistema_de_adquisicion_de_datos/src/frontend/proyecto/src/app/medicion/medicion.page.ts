@@ -39,26 +39,8 @@ export class MedicionPage implements OnInit {
     this.id=0;
     this.Observables=interval(3000);
     this.subscription ;
-    this.medidasTiempoReal={
-      idMedicion:0,
-      alineacion:0,
-      peralte:0,
-      nivel_izquierdo: 0,
-      nivel_derecho: 0,
-      distancia: 0,
-      idtrabajo2: 0,
-      tipoMedicion:0,
-    };
-    this.valorABuscar={
-      idMedicion:0,
-      alineacion:0,
-      peralte:0,
-      nivel_izquierdo: 0,
-      nivel_derecho: 0,
-      distancia: 0,
-      idtrabajo2: 0,
-      tipoMedicion:0,
-    }
+    this.medidasTiempoReal={idMedicion:0, alineacion:0, peralte:0, nivel_izquierdo: 0, nivel_derecho: 0, distancia: 0, idtrabajo2: 0, tipoMedicion:0,};
+    this.valorABuscar={idMedicion:0, alineacion:0, peralte:0, nivel_izquierdo: 0, nivel_derecho: 0, distancia: 0, idtrabajo2: 0, tipoMedicion:0};
    }
    
   ngOnInit() {

@@ -8,12 +8,15 @@ import { TrabajoPageRoutingModule } from './trabajo-routing.module';
 
 import { TrabajoPage } from './trabajo.page';
 
+import { HeaderModule } from '../header/header.module'; // Importa HeaderModule
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    TrabajoPageRoutingModule
+    TrabajoPageRoutingModule,
+    HeaderModule // Asegúrate de incluir HeaderModule aquí
   ],
   declarations: [TrabajoPage]
 })

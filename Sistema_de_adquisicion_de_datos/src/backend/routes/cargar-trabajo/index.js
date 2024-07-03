@@ -6,7 +6,7 @@ var pool = require('../../mysql-connector');
 
 routerCargarTrabajo.get('/', function(req, res) {
     const id = req.params.id;
-    console.log("el dato para consultar en la base de datos", id);
+    //console.log("el dato para consultar en la base de datos", id);
     const sqlQuery = 'SELECT `linea` FROM `trabajo`GROUP BY linea HAVING COUNT(*)>1 UNION SELECT `linea` FROM `trabajo`GROUP BY linea HAVING COUNT(*)=1;';
 
     pool.query(sqlQuery, function(error, results)  {    

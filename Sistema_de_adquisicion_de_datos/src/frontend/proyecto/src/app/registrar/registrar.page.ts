@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { RegistrarService } from '../services/registrar.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, PopoverController } from '@ionic/angular';
 import { Bateadora } from '../interfaces/bateadora';
 import { ToastController } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
+import { Login } from '../interfaces/login';
+import { UserPopoverComponent } from '../user-popover/user-popover.component';
 @Component({
   selector: 'app-registrar',
   templateUrl: './registrar.page.html',
@@ -11,24 +14,46 @@ import { ToastController } from '@ionic/angular';
 export class RegistrarPage implements OnInit {
   id:any;
   equipos:any;
-  bateadora: Bateadora ={
-    idBateadora : 0 ,
-    numeroBateadora:"",
-    jefeEquipo: "",
-    supervisor:""
-  };
-  constructor(private _registrarServices: RegistrarService, private alertController: AlertController, private toastController: ToastController) { 
+  prueba:any = "hola";
+  bateadora: Bateadora ={idBateadora : 0, numeroBateadora:"", jefeEquipo: "", supervisor:""};
+  usuario:any;
+  nombre: string = 'Nombre del Usuario'; // Ejemplo de inicialización de nombre
+  apellido: string = 'Apellido del Usuario'; // Ejemplo de inicialización de apellido
+  constructor(private _registrarServices: RegistrarService, private alertController: AlertController,
+    private toastController: ToastController, private activateRoutes:ActivatedRoute, private popoverController: PopoverController,) { 
     this.id = 0;
   }
 
   ngOnInit() {
+    this.usuario = this.activateRoutes.snapshot.paramMap.get('legajo');
+    if (this.usuario) {
+      try {
+        const usuarioObj = JSON.parse(this.usuario)[0];
+        this.nombre = usuarioObj.nombre;
+        this.apellido = usuarioObj.apellido;
+        this.prueba =this.usuario;
+      } catch (error) {
+        console.error("Error al parsear el JSON:", error);
+      }
+    } else {
+      console.error("No se encontró 'legajo' en el paramMap.");
+    }
     this._registrarServices.getEquiposRegistrados()
     .then((registro)=>{
       this.equipos = registro;
       this.id = registro.idbateadora;
     })
     .catch((error)=>console.log(error));
+   
   }
+  // async presentPopover(ev: any) {
+  //   const popover = await this.popoverController.create({
+  //     component: UserPopoverComponent,
+  //     event: ev,
+  //     translucent: true
+  //   });
+  //   await popover.present();
+  // }
   async guardar(){ 
     const alert = await this.alertController.create({
       header:'Ingresar equipo de trabajo',
