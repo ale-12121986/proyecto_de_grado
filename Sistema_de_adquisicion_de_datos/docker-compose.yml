@@ -75,14 +75,9 @@ services:
         volumes:
              -                     ./certificados:/opt/emqx/etc/certs
         # environment:
-            # -                      EMQX_LISTENER__SSL__EXTERNAL__CACERTFILE=/opt/emqx/etc/certs/cacert.pem
-            # -                      EMQX_LISTENER__SSL__EXTERNAL__CERTFILE=/opt/emqx/etc/certs/cert.pem
-            # -                      EMQX_LISTENER__SSL__EXTERNAL__KEYFILE=/opt/emqx/etc/certs/key.key
-            # -                      EMQX_LISTENER__WSS__EXTERNAL__CACERTFILE=/opt/emqx/etc/certs/cacert.pem
-            # -                      EMQX_LISTENER__WSS__EXTERNAL__CERTFILE=/opt/emqx/etc/certs/cert.pem
-            # -                      EMQX_LISTENER__WSS__EXTERNAL__KEYFILE=/opt/emqx/etc/certs/key.key
-            # -                      EMQX_AUTH__USERNAME:"BateadorasVyO"
-            # -                      EMQX_AUTH__PASSWORD:"Trenes_Argentinos"
+
+        #     -               EMQX_DASHBOARD__DEFAULT_USER__USERNAME: "public"  # Cambia esto si quieres usar otro usuario
+        #     -               EMQX_DASHBOARD__DEFAULT_USER__PASSWORD: "Alex+18996365"  #
         networks:
             Sistema_de_adquisicion_de_datos:
                 aliases:
