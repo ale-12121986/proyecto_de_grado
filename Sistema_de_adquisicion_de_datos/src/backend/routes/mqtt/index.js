@@ -111,12 +111,12 @@ client.on('message', (topic, message) => {
 
 routerMqtt.get('/', function(req,res){
     
-    constante++;
-    distancia1=constante;
-    alineacion1=constante
-    peralte1=constante;
-    nivel_izquierdo1=constante;
-    nivel_derecho1 =constante;
+    // constante++;
+    // distancia1=constante;
+    // alineacion1=constante
+    // peralte1=constante;
+    // nivel_izquierdo1=constante;
+    // nivel_derecho1 =constante;
 
     if (distanciaVieja<distancia1) {
         const resultado={
