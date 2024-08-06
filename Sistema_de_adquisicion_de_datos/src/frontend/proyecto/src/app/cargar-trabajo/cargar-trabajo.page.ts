@@ -65,7 +65,9 @@ export class CargarTrabajoPage implements OnInit {
       window.location.reload();
     });    
   }
-
+  atras(){
+    this.navCtrl.back();
+  }
   async mostrarPopup(){
     const alert = await this.alertController.create({
       header:'Ingresar una linea nueva',

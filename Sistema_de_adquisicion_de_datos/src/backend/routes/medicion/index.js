@@ -7,6 +7,7 @@ var pool = require('../../mysql-connector');
 
 routerMedicion.post('/buscar', function (req, res) {
     const valor = req.body;
+    console.log(valor);
     const sqlQuery = "SELECT distancia, alineacion, peralte, nivel_izquierdo, nivel_derecho FROM medicion WHERE idtrabajo2 = ? AND tipoMedicion =?"
     pool.query(sqlQuery, [valor.idMedicion, valor.tipoMedicion], function(error,results){
         if (error) {

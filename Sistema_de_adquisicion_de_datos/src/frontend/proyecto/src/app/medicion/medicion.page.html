@@ -17,7 +17,7 @@
         <ion-button expand="block" (click)="mostrarDatosTabla()">Ver tabla</ion-button>
       </ion-col>
       <ion-col size="3">
-        <ion-button expand="block" (click)="startListening()">Ver en tiempo real</ion-button>
+        <ion-button expand="block" (click)="startListening()"  [disabled]="!botonTiempoRealHabilitado">Ver en tiempo real</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

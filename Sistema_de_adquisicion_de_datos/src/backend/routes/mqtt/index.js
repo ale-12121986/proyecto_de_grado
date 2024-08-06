@@ -119,6 +119,7 @@ routerMqtt.get('/', function(req,res){
     // nivel_derecho1 =constante;
 
     if (distanciaVieja<distancia1) {
+        console.log("Entro a leer en tiemopo real");
         const resultado={
             "distancia":distancia1,
             "alineacion":alineacion1,

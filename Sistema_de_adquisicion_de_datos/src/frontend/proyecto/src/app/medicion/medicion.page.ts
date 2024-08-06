@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MedicionService } from '../services/medicion.service';
 import { AlertController, NavController } from '@ionic/angular';
 import domtoimage from 'dom-to-image'; // Importar dom-to-image
+import { ChangeDetectorRef } from '@angular/core';
 ;
 @Component({
   selector: 'app-medicion',
@@ -28,6 +29,8 @@ export class MedicionPage implements OnInit {
   chartNivelDerecho: any;
   Observables:Observable<any>
   subscription: Subscription| null=null;
+  botonTiempoRealHabilitado: boolean = false;
+
   @ViewChild('barCanvas', { static: true }) barCanvas!:ElementRef<HTMLCanvasElement>; 
   @ViewChild('grafAlineacion', {  }) grafAlineacion!: ElementRef<HTMLCanvasElement>;
   @ViewChild('grafPeralte', { }) grafPeralte!:ElementRef<HTMLCanvasElement>;
@@ -35,7 +38,7 @@ export class MedicionPage implements OnInit {
   @ViewChild('grafNivelDerecho', { }) grafNivelDerecho!:ElementRef<HTMLCanvasElement>;
 
   constructor(private activateRoutes: ActivatedRoute, private _medicionService:MedicionService,private alertController: AlertController,
-              private navCtrl: NavController ) {
+              private navCtrl: NavController,private cdr: ChangeDetectorRef ) {
     this.id=0;
     this.Observables=interval(3000);
     this.subscription ;
@@ -86,13 +89,17 @@ export class MedicionPage implements OnInit {
           xAxes:[{
             scaleLabel: {
               display: true,
-              labelString: 'Distancia' // Aquí puedes cambiar el título del eje x
+              labelString: 'Distancia (metros)' // Aquí puedes cambiar el título del eje x
             }
           }],
           yAxes: [
             {
               ticks: {
                 beginAtZero: true,
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'Alineación (milímetros)' // Aquí se indica que los valores están en milímetros
               }
             }
           ]
@@ -119,13 +126,16 @@ export class MedicionPage implements OnInit {
           xAxes:[{
             scaleLabel: {
               display: true,
-              labelString: 'Distancia' // Aquí puedes cambiar el título del eje x
+              labelString: 'Distancia (metros)' // Aquí puedes cambiar el título del eje x
             }
         }],
           yAxes: [
             {
               ticks: {
                 beginAtZero: true,
+              },scaleLabel: {
+                display: true,
+                labelString: 'Peralte (milímetros)' // Aquí se indica que los valores están en milímetros
               }
             }
           ]
@@ -152,13 +162,17 @@ export class MedicionPage implements OnInit {
           xAxes:[{
             scaleLabel: {
               display: true,
-              labelString: 'Distancia' // Aquí puedes cambiar el título del eje x
+              labelString: 'Distancia(metros)' // Aquí puedes cambiar el título del eje x
             }
         }],
           yAxes: [
             {
               ticks: {
                 beginAtZero: true,
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'Nivel Izquierdo (milímetros)' // Aquí se indica que los valores están en milímetros
               }
             }
           ]
@@ -185,13 +199,17 @@ export class MedicionPage implements OnInit {
           xAxes:[{
             scaleLabel: {
               display: true,
-              labelString: 'Distancia' // Aquí puedes cambiar el título del eje x
+              labelString: 'Distancia(metros)' // Aquí puedes cambiar el título del eje x
             }
         }],
           yAxes: [
             {
               ticks: {
                 beginAtZero: true,
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'Nivel Derecho (milímetros)' // Aquí se indica que los valores están en milímetros
               }
             }
           ]
@@ -201,7 +219,6 @@ export class MedicionPage implements OnInit {
   }
 
   graficaGuardada(){
-
     // Update Alineacion Chart
     this.chartAlineacion.data.labels = this.mediciones.map(objeto=>objeto.distancia);
     this.chartAlineacion.data.datasets[0].data = this.mediciones.map(objeto=>objeto.alineacion);
@@ -227,45 +244,37 @@ export class MedicionPage implements OnInit {
     
   }
   async mostrarDatosGrafico(){
+
+    this.botonTiempoRealHabilitado = true;
     const alert = await this.alertController.create({
-      header:'indicar recorrido',
-      buttons:[
+      header: 'Seleccionar Recorrido',
+      buttons: [
         {
-          text:'Recorrido 1',
-          handler:()=>{
-            this.valorABuscar.tipoMedicion = 0;
-            this.buscarMedicion(this.valorABuscar);
-            this.barChartMethod();
-            this.mostrarGrafica = true;
-            this.mostrarTabla = false;
-            this.graficaGuardada();
+          text: 'Recorrido 1',
+          handler: () => {
+            this.seleccionarRecorridoGrafica(0);
           }
         },
         {
-          text:'Recorrido 2',
-          handler:()=>{
-            this.valorABuscar.tipoMedicion = 1;
-            this.buscarMedicion(this.valorABuscar);
-            this.barChartMethod();
-            this.mostrarGrafica = true;
-            this.mostrarTabla = false;
-            this.graficaGuardada();
+          text: 'Recorrido 2',
+          handler: () => {
+            this.seleccionarRecorridoGrafica(1);
           }
         },
         {
-          text:'Recorrido 3',
-          handler:()=>{
-            this.valorABuscar.tipoMedicion = 2;
-            this.buscarMedicion(this.valorABuscar);
-            this.barChartMethod();
-            this.mostrarGrafica = true;
-            this.mostrarTabla = false;
-            this.graficaGuardada();
+          text: 'Recorrido 3',
+          handler: () => {
+            this.seleccionarRecorridoGrafica(2);
           }
         },
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        }
       ]
-    }); 
-    await alert.present();  
+    });
+
+    await alert.present();
   }
   
   buscarMedicion(valor:Medicion){
@@ -284,40 +293,65 @@ export class MedicionPage implements OnInit {
 
   async mostrarDatosTabla(){
     const alert = await this.alertController.create({
-      header:'indicar recorrido',
-      buttons:[
+      header: 'Seleccionar Recorrido',
+      buttons: [
         {
-          text:'Recorrido 1',
-          handler:()=>{
-            this.valorABuscar.tipoMedicion = 0;
-            this.buscarMedicion(this.valorABuscar);
+          text: 'Recorrido 1',
+          handler: () => {
             this.mostrarGrafica = false;
             this.mostrarTabla = true;
+            this.seleccionarRecorridoTabla(0);
           }
         },
         {
-          text:'Recorrido 2',
-          handler:()=>{
-            this.valorABuscar.tipoMedicion = 1;
-            this.buscarMedicion(this.valorABuscar);
+          text: 'Recorrido 2',
+          handler: () => {
             this.mostrarGrafica = false;
             this.mostrarTabla = true;
+            this.seleccionarRecorridoTabla(1);
           }
         },
         {
-          text:'Recorrido 3',
-          handler:()=>{
-            this.valorABuscar.tipoMedicion = 2;
-            this.buscarMedicion(this.valorABuscar);
+          text: 'Recorrido 3',
+          handler: () => {
             this.mostrarGrafica = false;
             this.mostrarTabla = true;
+            this.seleccionarRecorridoTabla(2);
           }
         },
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        }
       ]
-    }); 
-    await alert.present();  
+    });
+
+    await alert.present();
 
   }
+  seleccionarRecorridoGrafica(tipoMedicion: number) {
+    this.valorABuscar.tipoMedicion = tipoMedicion;
+    this.buscarMedicion(this.valorABuscar);
+    this.barChartMethod();
+    this.mostrarGrafica = true;
+    this.mostrarTabla = false;
+    this.graficaGuardada();
+    // Forzar la actualización del DOM
+    setTimeout(() => {
+      this.buscarMedicion(this.valorABuscar);
+      this.barChartMethod();
+      this.mostrarGrafica = true;
+      this.mostrarTabla = false;
+      this.graficaGuardada();
+    }, 100); // Ajusta el tiempo según sea necesario
+  }
+
+  seleccionarRecorridoTabla(tipoMedicion: number) {
+    this.valorABuscar.tipoMedicion = tipoMedicion;
+    this.buscarMedicion(this.valorABuscar);
+    // Asegúrate de que estos métodos se llamen de manera sincrónica
+  }
+
   updateCharts(data:Medicion) {
     // Update Alineacion Chart
     this.chartAlineacion.data.labels.push(data.distancia);
