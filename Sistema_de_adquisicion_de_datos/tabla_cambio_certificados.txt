@@ -1,0 +1,17 @@
+servidor:
+│
+├──cert.pem ---> server.cert
+├──key.pem ---> server.key
+└──cacert.pem --->ca.cert
+
+cliente (software y microcontrolador):
+    software
+    │
+    ├──client.crt ---> client.crt
+    ├──client.key ---> client.key
+    └──ca.crt ---> ca.crt
+    esp32
+    │
+    ├──client.crt ---> client.crt
+    ├──client.key ---> client.key
+    └──ca.crt ---> ca.crt
