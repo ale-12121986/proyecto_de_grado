@@ -1,8 +1,8 @@
 servidor:
 │
-├──cert.pem ---> server.cert
+├──cert.pem ---> server.crt
 ├──key.pem ---> server.key
-└──cacert.pem --->ca.cert
+└──cacert.pem --->ca.crt
 
 cliente (software y microcontrolador):
     software

@@ -25,7 +25,7 @@ const options = {
     // port:8083,
     port:8084,
     clean: true, // retain session
-    host:'192.168.243.8',// 192.168.226.8  192.168.2.4    54.232.196.184   
+    host:'192.168.2.4',// 192.168.226.8  192.168.2.4    54.232.196.184   
     connectTimeout: 4000, // Timeout period
     // Authentication information
     clientId: `emqx_test_${Math.random().toString(16).slice(3)}`,
@@ -36,13 +36,10 @@ const options = {
     key: fs.readFileSync('./certificados/client.key'), // Ajusta la ruta    ./certificados/ESP32_1.key
     cert: fs.readFileSync('./certificados/client.crt'), // Ajusta la ruta   ./certificados/ESP32_1.crt
     ca: fs.readFileSync('./certificados/ca.crt'), // Ajusta la ruta     './certificados/cacert.crt'
-    
-    // key: fs.readFileSync('./certificados/client-key.pem'), // Ajusta la ruta    ./certificados/ESP32_1.key
-    // cert: fs.readFileSync('./certificados/client-cert.pem'), // Ajusta la ruta   ./certificados/ESP32_1.crt
-    // ca: fs.readFileSync('./certificados/cacert.pem'), // Ajusta la ruta     './certificados/cacert.crt'
+
 }
 
-var client = mqtt.connect('wss://192.168.243.8/mqtt', options); // 192.168.2.4  192.168.226.8   54.232.196.184
+var client = mqtt.connect('wss://192.168.2.4/mqtt', options); // 192.168.2.4  192.168.226.8   54.232.196.184
 //Comunicacion mqtt
 client.on('connect', () =>{
     console.log("Conectado al broker MQTT por WS con exito", topic);
