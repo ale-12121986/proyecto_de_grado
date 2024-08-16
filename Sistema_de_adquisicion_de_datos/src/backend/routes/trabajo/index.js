@@ -84,4 +84,21 @@ routerTrabajo.get('/:equipos', function(req, res) {
     });
     // res.send({'mensaje':'Estoy en dispositivo'}).status(200)
 });
+routerTrabajo.post('/modificar',function(req,res){
+    const valor = req.body;
+    console.log(valor);
+    const formattedFecha = new Date(valor.fecha).toISOString().slice(0, 19).replace('T', ' ');
+    console.log(formattedFecha);
+    const sqlQuery = 'UPDATE trabajo SET fecha = ?, via = ?, ramal = ?, progresivaInicial = ?, progresivaFinal = ?, linea = ? WHERE idTrabajo = ? '
+    pool.query(sqlQuery, [formattedFecha, valor.via, valor.ramal, valor.progresivaInicial, valor.progresivaFinal, valor.linea, valor.idTrabajo], function(error, results)  {    
+        if (error) {
+            res.send(error).status(400);
+            return;
+        }
+        console.log("se modificaron  los datos");
+        res.send();
+    });
+});
+
+
 module.exports = routerTrabajo;

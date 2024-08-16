@@ -26,6 +26,7 @@ export class CargarTrabajoPage implements OnInit {
 
   ngOnInit() {
     this.id = this.activateRoutes.snapshot.paramMap.get("id");
+
     this._cargarTrabajo.getCargarTrabajo()
     .then((cargar)=>{
       this.cargar=cargar
@@ -52,14 +53,14 @@ export class CargarTrabajoPage implements OnInit {
     };
     console.log('la carga fue', this.datosCargados);
     this._cargarTrabajo.setCargarTrabajo( this.datosCargados).then(()=>{
-      this.presentToast("Se ha modificado el equipo");
+      this.presentToast("Se ha cargado el trabajo");
 
     })
     .catch((error) =>{
       alert ( error );
       console.log(error)
     });
-    let cadenaConcatenada: string = `/trabajo/${this.id}`;
+    let cadenaConcatenada: string = `/trabajo/${this.id}/params carga-trabajo`;
     this.navCtrl.navigateForward(cadenaConcatenada).then(() => {
       // Recargar la página
       window.location.reload();

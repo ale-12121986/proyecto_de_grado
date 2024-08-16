@@ -32,17 +32,17 @@ export class TrabajoPage implements OnInit {
     this.id = this.activateRoutes.snapshot.paramMap.get("id");
     this.prueba = this.activateRoutes.snapshot.paramMap.get("param");
     if (this.prueba) {
-      try {
-        const usuarioObj = JSON.parse(this.prueba)[0];
-        this.nombre = usuarioObj.nombre;
-        this.apellido = usuarioObj.apellido;
-        // this.nombre= this.prueba.nombre;
-        // this.apellido= this.prueba.apellido;
-        this.prueba ={nombre:this.nombre, apellido:this.apellido};
-        console.log("datos q me llegaron de la clave trabajo " + this.prueba + this.nombre + " " + this.apellido);
-      } catch (error) {
-        console.error("Error al parsear el JSON:", error);
-      }
+      // try {
+      //   const usuarioObj = JSON.parse(this.prueba)[0];
+      //   this.nombre = usuarioObj.nombre;
+      //   this.apellido = usuarioObj.apellido;
+      //   // this.nombre= this.prueba.nombre;
+      //   // this.apellido= this.prueba.apellido;
+      //   this.prueba ={nombre:this.nombre, apellido:this.apellido};
+      //   console.log("datos q me llegaron de la clave trabajo " + this.prueba + this.nombre + " " + this.apellido);
+      // } catch (error) {
+      //   console.error("Error al parsear el JSON:", error);
+      // }
     } else {
       console.error("No se encontró 'legajo' en el paramMap.");
     }
@@ -62,10 +62,43 @@ export class TrabajoPage implements OnInit {
   guardar(){
     this.router.navigate([CargarTrabajoPage]);
   }
-  modificar(dato:any){
-    console.log('se modifico ',dato);
-    this.router.navigate([CargarTrabajoPage],{state:{dato}});
+  async modificar(dato:any){
+    console.log("entro", dato);
+    const formattedFecha = new Date(dato.fecha).toISOString().split('T')[0];
+    const alert = await this.alertController.create({
+      header:'modificar trabajo',
+      inputs:[
+        { name:"linea", type:"text", placeholder:"Linea",value: dato.linea},
+        { name:"via", type:"text", placeholder:"Via", value:dato.via},
+        { name:"ramal", type:"text", placeholder:"Ramal",value:dato.ramal},
+        { name:"progresivaInicial", type:"number",placeholder:"progresivaInicial",value:dato.progresivaInicial},
+        { name:"progresivaFinal", type:"number", placeholder:"progresivaFianl",value:dato.progresivaFinal},
+        { name:"fecha", type:"date", placeholder:"fecha",value: formattedFecha }
+      ],
+      buttons:[
+        {
+        text:'Cancelar',
+        role:'cancel',
+        handler:()=>{console.log('Accion cancelada');}
+        },
+        {
+          text:'Aceptar',
+          handler:(data:Trabajo)=>{
+            data.idTrabajo = dato.idTrabajo;
+            this._trabajoService.setModificarTrabajo(data)
+            .then((listaTrabajo)=>{
+              this.datosTrabajo = listaTrabajo; // Actualizar la lista de trabajos
+              location.reload();
+          })
+          .catch((error)=>{console.log(error)});
+          }
+        } 
+      ]
+    });
+
+    await alert.present();
   }
+
   eliminar(dato:any){
     console.log('se elimino ',dato);
     this.trabajo.idTrabajo = dato;
@@ -91,9 +124,9 @@ export class TrabajoPage implements OnInit {
         { name:"linea", type:"text", placeholder:"Linea"},
         { name:"via", type:"text", placeholder:"Via"},
         { name:"ramal", type:"text", placeholder:"Ramal"},
-        { name:"progresivaInical", type:"number",placeholder:"Ramal"},
-        { name:"progresivaFinal", type:"number", placeholder:"Ramal"},
-        { name:"fecha", type:"date", placeholder:"Ramal"}
+        { name:"progresivaInical", type:"number",placeholder:"progresivaInical"},
+        { name:"progresivaFinal", type:"number", placeholder:"rogresivaFina"},
+        { name:"fecha", type:"date", placeholder:"fecha"}
       ],
       buttons:[
         {
@@ -106,7 +139,7 @@ export class TrabajoPage implements OnInit {
           handler:(data:Trabajo)=>{
             this._trabajoService.setBuscarTrabajo(data)
             .then((listaTrabajo)=>{
-              this.datosTrabajo = listaTrabajo; // Actualizar la lista de trabajos
+
           })
           .catch((error)=>{console.log(error)});
           }

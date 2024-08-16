@@ -25,4 +25,8 @@ export class TrabajoService {
   getEquiposTrabajo():Promise<any>{
     return firstValueFrom(this._http.get('http://localhost:8000/trabajo/equipos'));
   }
+  setModificarTrabajo(dato:Trabajo):Promise<any>{
+    console.log("entro a modificar",dato);
+    return firstValueFrom(this._http.post('http://localhost:8000/trabajo/modificar', dato));
+  }
 }
